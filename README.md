@@ -9,4 +9,4 @@ To build a full stack application using the MERN stack.
 
 # Task Lists
 
-- [ ] Create the Login Form and Register Form
+- [x] Create the Login Form and Register Form
