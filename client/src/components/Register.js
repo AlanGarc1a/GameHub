@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Grid from '@material-ui/core/Grid';
+import { Grid , TextField, Button, Typography} from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 class Register extends Component {
 
@@ -24,13 +25,53 @@ class Register extends Component {
     render() {
         return (
             <div>
-                <Grid justify="center">
-                    <div>
-                        Content
-                    </div>
-                    <div>
-                        Content
-                    </div>
+                <Grid container direction="column" alignItems="center" justify="center" style={{minHeight: '100vh'}}>
+                    <Typography variant="h4">Register</Typography>
+                    <Grid item>
+                        <div>
+                            <form style={{ display: 'flex', flexDirection: 'column', margin: '20px'}}>
+                                <TextField
+                                    size="small" 
+                                    id="outlined-basic" 
+                                    label="Full Name" 
+                                    variant="outlined" 
+                                    style={{margin: '5px'}} />
+                                <TextField
+                                    size="small" 
+                                    id="outlined-basic" 
+                                    label="Email" 
+                                    variant="outlined" 
+                                    style={{margin: '5px'}} />
+                                <TextField
+                                    size="small" 
+                                    id="outlined-basic" 
+                                    label="Username" 
+                                    variant="outlined" 
+                                    style={{margin: '5px'}} />
+                                <TextField
+                                    size="small" 
+                                    id="outlined-basic" 
+                                    label="Password" 
+                                    variant="outlined" 
+                                    style={{margin: '5px', marginBottom: '25px'}} />
+                            
+                                <Button variant="contained" color="primary">
+                                    register
+                                </Button>
+                            </form>
+                        </div>
+                    </Grid>
+                    <Grid item>
+                        <Typography component="p">
+                            Already have an account?
+                            <Link to="/login" style={{textDecoration: 'none', color: 'blue'}}>
+                                Log in
+                            </Link>
+                        </Typography>
+                    </Grid>
+                    <Typography component="p" style={{ marginTop: '10px'}}>
+                        &copy; GameHub 2021
+                    </Typography>
                 </Grid>
             </div>
         );
