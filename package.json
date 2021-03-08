@@ -1,0 +1,23 @@
+{
+  "name": "gamehub",
+  "version": "1.0.0",
+  "description": "A CRUD based application for games",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlanGarc1a/GameHub.git"
+  },
+  "author": "Alan Garcia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlanGarc1a/GameHub/issues"
+  },
+  "homepage": "https://github.com/AlanGarc1a/GameHub#readme",
+  "devDependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.11.19"
+  }
+}
