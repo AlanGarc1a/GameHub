@@ -1,12 +1,13 @@
 import React from 'react';
-import { AppBar, Avatar, Toolbar, Typography, makeStyles, withTheme } from '@material-ui/core';
+import { AppBar, Avatar, Toolbar, Typography, makeStyles } from '@material-ui/core';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     small: {
         width: theme.spacing(4),
-        height: theme.spacing(4)
+        height: theme.spacing(4),
+        marginRight: 15
     },
     title: {
         flexGrow: 1
@@ -35,6 +36,9 @@ const NavBar = () => {
                         </Link>
                     </Typography>
                     <Avatar className={classes.small}/>
+                    <Typography varaint="p">
+                        Logout
+                    </Typography>
                 </Toolbar>
             </AppBar>
         </div>
