@@ -1,50 +1,78 @@
 import React from 'react';
-import { Container, Grid, Button, makeStyles } from '@material-ui/core';
+import { Container, Grid, Button, withStyles, Typography } from '@material-ui/core';
 import GameCard from './GameCard';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-const GameList = () => {
+const styles = theme => ({
+    add: {
+        display: 'flex',
+        justifyContent: 'center',
+        marginBottom: 50
+    }
+});
 
-    const useStyles = makeStyles( (theme) => ({
-        add: {
-            display: 'flex',
-            justifyContent: 'center',
-            marginBottom: 50
+class GameList extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            games: []
         }
-    }));
+    }
 
-    const classes = useStyles();
+    componentDidMount = () => {
+        axios.get('http://localhost:5000/g/')
+            .then(res => {
+                if(res.data.length > 0){
+                    this.setState({ 
+                        games: res.data 
+                    });
+                }
+                console.log(res);
+            })
+            .catch(function(error){
+                console.log(error);
+            });
+    }
 
-    return (
-
-        <div>
-            <Container style={{marginTop: '50px'}}>
-                <div className={classes.add}>
-                    <div>
-                        <Link to="/create">
-                            <Button variant="outlined" color="primary">
-                                Create New Game
-                            </Button>
-                        </Link>
-                    </div>
-                </div>
-                <Grid container justify="center" spacing={4}>
-                    <Grid item>
-                        <GameCard />
-                    </Grid>
-                    <Grid item>
-                        <GameCard />
-                    </Grid>
-                    <Grid item>
-                        <GameCard />
-                    </Grid>
-                    <Grid item>
-                        <GameCard />
-                    </Grid>
+    gameList = () => {
+        return this.state.games.map( game => {
+            return (
+                <Grid item key={game._id} >
+                    <GameCard 
+                        title={game.title} 
+                        date={game.date}
+                        image={game.image} 
+                        summary={game.summary} />
                 </Grid>
-            </Container>
-        </div>
-    );
+            );
+        });
+    }
+    
+    render() {
+        const { classes } = this.props;
+        const gameList = this.state.games;
+
+        return (
+            <div>
+                <Container style={{marginTop: '50px'}}>
+                    <div className={classes.add}>
+                        <div>
+                            <Link to="/create">
+                                <Button variant="outlined" color="primary">
+                                    Create New Game
+                                </Button>
+                            </Link>
+                        </div>
+                    </div>
+                    <Grid container justify="center" spacing={4}>
+                        { gameList ? this.gameList() : <Typography>No games</Typography> }
+                    </Grid>
+                </Container>
+            </div>
+        );
+    }
 }
 
-export default GameList;
+export default withStyles(styles)(GameList);
