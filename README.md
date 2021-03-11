@@ -12,5 +12,8 @@ To build a full stack application using the MERN stack.
 - [x] Create the Login Form and Register Form
 - [x] Create the navigation
 - [x] Create the game card
-- [ ] Render a list of cards
-- [ ] Add the create new card
+- [x] Render a list of cards
+- [x] Add the create new card
+- [x] Create the server
+- [ ] Create the user and game card models
+- [ ] Save a user when he registers
