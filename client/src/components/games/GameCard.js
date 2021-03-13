@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, withStyles, Typography } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const styles = theme => ({
     root: {
@@ -7,7 +8,7 @@ const styles = theme => ({
         minHeight: 400
     },
     media: {
-        height: '200px',
+        height: '250px',
         paddingTop: '25'
     },
     title: {
@@ -19,10 +20,6 @@ const styles = theme => ({
 });
 
 class GameCard extends React.Component {
-
-    constructor(props){
-        super(props);
-    }
     
     render() {
         const { classes } = this.props;
@@ -32,7 +29,7 @@ class GameCard extends React.Component {
                 <Card className={classes.root}>
                     <CardHeader 
                         title={this.props.title}
-                        subheader="release date"
+                        subheader={this.props.date}
                     />
                     <CardMedia 
                         className={classes.media}
@@ -47,8 +44,9 @@ class GameCard extends React.Component {
                         </Typography>
                     </CardContent>
                     <CardActions>
-                        <Button color="primary">Edit</Button>
-                        <Button color="primary">Learn More</Button>
+                        <Link to={`/edit/${this.props.id}`}>
+                            <Button color="primary">Edit</Button>
+                        </Link>
                     </CardActions>
                 </Card>
             </div>

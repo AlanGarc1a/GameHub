@@ -28,7 +28,8 @@ const styles = theme => ({
     }
 });
 
-class GameCardCreate extends React.Component {
+class GameCardEdit extends React.Component {
+
     constructor(props) {
         super(props);
 
@@ -36,56 +37,70 @@ class GameCardCreate extends React.Component {
             title: '',
             date: '',
             image: '',
-            body: '',
-            redirect: false
+            summary: '',
         }
+    }
+
+
+    componentDidMount = () => {
+        const { id } = this.props.match.params;
+
+        axios.get(`http://localhost:5000/g/${id}`)
+            .then( res => {
+                    this.setState({
+                        title: res.data.title,
+                        date: res.data.date,
+                        image: res.data.image,
+                        summary: res.data.summary,
+                    });
+            })
+            .catch( error => {
+                console.log(error);
+            })
     }
 
     handleChange = (event) => {
         this.setState({
-          [event.target.name]: event.target.value
-        })
+            [event.target.name]: event.target.value    
+        });
     }
 
     onSubmit = (event) => {
         event.preventDefault();
-
+        const { id } = this.props.match.params;
+        
         const game = {
             title: this.state.title,
             date: this.state.date,
             image: this.state.image,
-            body: this.state.body
-        }
-        console.log(game);
+            summary: this.state.summary
+        };
 
-        axios.post("http://localhost:5000/g/create", game)
-            .then( () => {
-                this.setState({ redirect: true});
-            })
-            .catch( (error) => {
-                console.log(error);
-            });
-        
-            this.setState({
-                title: '',
-                date: '',
-                image: '',
-                body: ''
-            });
+        axios.put(`http://localhost:5000/g/update/${id}`, game)
+             .then( res => {
+                 console.log('Game updated successfully')
+                 this.setState({
+                     redirect: true
+                 });
+             })
+             .catch(error => {
+                 console.log(error)
+             });
     }
 
     render() {
+
         const { classes } = this.props;
         const { redirect } = this.state;
 
-        if(redirect){
-            return <Redirect to="/" />;
+        if(redirect) {
+            return <Redirect to="/" />
         }
-        
+
         return (
             <div>
                 <Grid container direction="column" justify="center" alignItems="center" style={{minHeight: '100vh'}}>
-                    <Typography variant="h5">New Game</Typography>
+                    <Typography variant="h5">Edit Game</Typography>
                     <div className={classes.center}>
                         <form className={classes.form} onSubmit={this.onSubmit}>
                             <TextField 
@@ -122,8 +137,8 @@ class GameCardCreate extends React.Component {
                                 placeholder="Summary"
                                 variant="outlined"
                                 className={classes.inputSpace}
-                                name='body'
-                                value={this.state.body}
+                                name='summary'
+                                value={this.state.summary}
                                 onChange={this.handleChange}
                             />
                             <Button color="primary" variant="outlined" type="submit">Submit</Button>
@@ -141,4 +156,4 @@ class GameCardCreate extends React.Component {
     }
 }
 
-export default withStyles(styles)(GameCardCreate);
+export default withStyles(styles)(GameCardEdit);

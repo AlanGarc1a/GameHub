@@ -37,10 +37,11 @@ class GameList extends React.Component {
     }
 
     gameList = () => {
-        return this.state.games.map( game => {
+        return this.state.games.map( (game, i) => {
             return (
-                <Grid item key={game._id} >
-                    <GameCard 
+                <Grid item key={i}>
+                    <GameCard
+                        id={game._id} 
                         title={game.title} 
                         date={game.date}
                         image={game.image} 
