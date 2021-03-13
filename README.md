@@ -17,3 +17,4 @@ To build a full stack application using the MERN stack.
 - [x] Create the server
 - [ ] Create the user and game card models
 - [ ] Save a user when he registers
+- [x] Create the edit route
