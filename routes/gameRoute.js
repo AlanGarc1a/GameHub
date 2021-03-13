@@ -5,7 +5,7 @@ let Game = require('../models/gamecard');
 
 //get all games
 //endpoint: http://localhost:5000/g/
-router.route('/').get((req, res) => {
+router.get('/', (req, res) => {
     Game.find()
         .then( games => res.json(games))
         .catch(error => res.status(400).json('Error: ' + error));
@@ -29,6 +29,24 @@ router.route('/create').post((req, res) => {
     game.save()
         .then( () => res.json('Game added'))
         .catch( error => res.status(400).json('Error: ' + error));
+});
+
+//endpoint: http://localhost:5000/g/:id
+//get one game
+router.get('/:id', (req, res) => {
+    Game.findById(req.params.id)
+        .then(game => res.json(game))
+        .catch(error => res.status(400).json('Error: ' + error));
+});
+
+//endpoint: http://localhost:5000/g/update/:id
+//update one game
+router.route('/update/:id').put((req, res) => {
+    const id = req.params.id;
+
+    Game.findByIdAndUpdate(id, { $set: req.body })
+        .then(() => { res.json('Game updated')})
+        .catch(error => res.status(400).json('Error: ' + error));
 });
 
 module.exports = router;
