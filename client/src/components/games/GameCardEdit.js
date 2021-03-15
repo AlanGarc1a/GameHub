@@ -21,7 +21,8 @@ const styles = theme => ({
     },
     red: {
         borderColor: 'red',
-        color: 'red'
+        color: 'red',
+        marginBottom: 15
     },
     rightSpace: {
         marginRight: 25
@@ -88,6 +89,17 @@ class GameCardEdit extends React.Component {
              });
     }
 
+    deleteGame = () => {
+        const { id } = this.props.match.params;
+
+        axios.delete(`http://localhost:5000/g/delete/${id}`)
+            .then( res => {
+                console.log(res);
+                this.setState({ redirect: true});
+            })
+            .catch( error => { console.log(error)});
+    }
+
     render() {
 
         const { classes } = this.props;
@@ -150,6 +162,9 @@ class GameCardEdit extends React.Component {
                             Cancel
                         </Button>
                     </Link>
+                    <Button variant="outlined" className={classes.red} onClick={this.deleteGame}>
+                        Delete
+                    </Button>
                 </Grid>
             </div>
         );
