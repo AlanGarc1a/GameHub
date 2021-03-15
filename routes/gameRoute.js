@@ -49,4 +49,14 @@ router.route('/update/:id').put((req, res) => {
         .catch(error => res.status(400).json('Error: ' + error));
 });
 
+//ednpoint: http://localhost:5000/g/delete-game/:id
+//delete one game
+router.delete('/delete/:id', (req, res) => {
+    const id  = req.params.id;
+
+    Game.findByIdAndRemove(id)
+        .then( () => { res.json('Game deleted') })
+        .catch( error => res.status(400).json('Error: ' + error) );
+});
+
 module.exports = router;
