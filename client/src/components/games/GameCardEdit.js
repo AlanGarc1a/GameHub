@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Button, TextField, withStyles, Typography, TextareaAutosize } from '@material-ui/core';
+import { Grid, Button, TextField, withStyles, Typography } from '@material-ui/core';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
@@ -142,9 +142,9 @@ class GameCardEdit extends React.Component {
                                 value={this.state.image}
                                 onChange={this.handleChange}
                             />
-                            <TextareaAutosize
-                                rowsMin={8}
-                                rowsMax={8} 
+                            <TextField
+                                rows={4}
+                                multiline
                                 size="small"
                                 placeholder="Summary"
                                 variant="outlined"
