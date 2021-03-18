@@ -1,18 +1,10 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-    fullName: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true
-    },
     username: {
         type: String,
-        minLength: 6,
         required: true
     },
     password: {
@@ -20,6 +12,10 @@ const userSchema = new Schema({
         required: true
     }
 });
+
+userSchema.methods.checkPassword = function(password) {
+    return bcrypt.compare(password, this.password);
+};
 
 const User = mongoose.model('User', userSchema);
 
