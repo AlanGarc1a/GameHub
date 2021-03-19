@@ -1,20 +1,26 @@
 # GameHub
 
-A MERN application where users can add their favorite video games from any generation and review them.
+A MERN application where users can create, update, and delete a game.
 
 # Motivation
 
 To build a full stack application using the MERN stack.
 
 
+# Technologies
+
+* Express.js
+* Mongoose.js
+* React.js
+* Axios for http requests
+
+
 # Task Lists
 
-- [x] Create the Login Form and Register Form
 - [x] Create the navigation
 - [x] Create the game card
 - [x] Render a list of cards
 - [x] Add the create new card
 - [x] Create the server
-- [x] Create the user and game card models
-- [x] Save a user when he registers
+- [x] Create game card model
 - [x] Create the edit route
