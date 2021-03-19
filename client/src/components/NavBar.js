@@ -1,9 +1,9 @@
-import React from 'react';
-import { AppBar, Avatar, Toolbar, Typography, makeStyles } from '@material-ui/core';
+import React, { Component } from 'react';
+import { AppBar, Toolbar, Typography, withStyles, Button } from '@material-ui/core';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 import { Link } from 'react-router-dom';
 
-const useStyles = makeStyles((theme) => ({
+const styles = theme => ({
     small: {
         width: theme.spacing(4),
         height: theme.spacing(4),
@@ -19,30 +19,31 @@ const useStyles = makeStyles((theme) => ({
         textDecoration: 'none',
         color: 'white'
     }
-}));
+});
 
-const NavBar = () => {
+class NavBar extends Component {
+    constructor(props) {
+        super();
+    }
+    
+    render() {
+        const { classes } = this.props;
 
-    const classes = useStyles();
-
-    return (
-        <div>
-            <AppBar position="static" color="primary">
-                <Toolbar>
-                    <SportsEsportsIcon className={classes.icon} />
-                    <Typography variant="h6" className={classes.title} >
-                        <Link to="/" className={classes.home}>
-                            GameHub
-                        </Link>
-                    </Typography>
-                    <Avatar className={classes.small}/>
-                    <Typography varaint="p">
-                        Logout
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-        </div>
-    );
+        return (
+            <div>
+                <AppBar position="static" color="primary">
+                    <Toolbar>
+                        <SportsEsportsIcon className={classes.icon} />
+                        <Typography variant="h6" className={classes.title} >
+                            <Link to="/" className={classes.home}>
+                                GameHub
+                            </Link>
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+            </div>
+        );
+    }
 };
 
-export default NavBar;
+export default withStyles(styles)(NavBar);
