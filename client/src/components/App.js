@@ -17,7 +17,7 @@ class App extends Component {
                         <Route path="/" exact component={Home} />
                         <Route path="/create" exact component={GameCardCreate} />
                         <Route path="/edit/:id" exact component={GameCardEdit} />
-                        <Route path="/:id" exact component={GameCardView} />
+                        <Route path="/:title/:id" exact component={GameCardView} />
                     </Switch>
                 </div> 
             </div>
