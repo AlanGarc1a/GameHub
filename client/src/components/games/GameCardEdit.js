@@ -1,31 +1,34 @@
 import React from 'react';
-import { Grid, Button, TextField, withStyles, Typography } from '@material-ui/core';
+import { Grid, Button, TextField, withStyles, Typography, Paper } from '@material-ui/core';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 const styles = theme => ({
-    center: {
-        display: 'flex',
-        justifyContent: 'center',
-        marginTop: 15,
-        marginBottom: 15,
-    },
     form: {
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
-        width: 300,
+        width: '500px'
     },
-    inputSpace: {
-        marginBottom: theme.spacing(2)
+    formTitle: {
+        textAlign: 'center',
+        padding: '25px 0px 25px 0px'
     },
-    red: {
-        borderColor: 'red',
-        color: 'red',
-        marginBottom: 15
+    textField: {
+        marginBottom: theme.spacing(1),
+        marginLeft: theme.spacing(5),
+        marginRight: theme.spacing(5),
     },
-    rightSpace: {
-        marginRight: 25
+    textFieldArea: {
+        marginBottom: theme.spacing(5),
+        marginLeft: theme.spacing(5),
+        marginRight: theme.spacing(5),
+    },
+    submitButton: {
+        margin: '0px 0px 50px 50px',
+        //width: '100px'
+    },
+    cancelButton: {
+        margin: '0px 0px 50px 25px'
     }
 });
 
@@ -103,7 +106,7 @@ class GameCardEdit extends React.Component {
     render() {
 
         const { classes } = this.props;
-        const { redirect } = this.state;
+        const { redirect, title, date, image, summary } = this.state;
 
         if(redirect) {
             return <Redirect to="/" />
@@ -111,60 +114,75 @@ class GameCardEdit extends React.Component {
 
         return (
             <div>
-                <Grid container direction="column" justify="center" alignItems="center" style={{minHeight: '100vh'}}>
-                    <Typography variant="h5">Edit Game</Typography>
-                    <div className={classes.center}>
-                        <form className={classes.form} onSubmit={this.onSubmit}>
-                            <TextField 
-                                size="small"
-                                placeholder="title"
-                                variant="outlined"
-                                className={classes.inputSpace}
-                                name='title'
-                                value={this.state.title}
-                                onChange={this.handleChange}
-                            />
-                            <TextField 
-                                size="small"
-                                placeholder="Released Date"
-                                variant="outlined"
-                                className={classes.inputSpace}
-                                name='date'
-                                value={this.state.date}
-                                onChange={this.handleChange}
-                            />
-                            <TextField 
-                                size="small"
-                                placeholder="Image"
-                                variant="outlined"
-                                className={classes.inputSpace}
-                                name='image'
-                                value={this.state.image}
-                                onChange={this.handleChange}
-                            />
-                            <TextField
-                                rows={4}
-                                multiline
-                                size="small"
-                                placeholder="Summary"
-                                variant="outlined"
-                                className={classes.inputSpace}
-                                name='summary'
-                                value={this.state.summary}
-                                onChange={this.handleChange}
-                            />
-                            <Button color="primary" variant="outlined" type="submit">Submit</Button>
-                        </form>
-                    </div>
-                    <Link to="/">
-                        <Button variant="outlined" 
-                                className={classes.red} >
-                            Cancel
-                        </Button>
-                    </Link>
-                    <Button variant="outlined" className={classes.red} onClick={this.deleteGame}>
-                        Delete
-                    </Button>
+                <Grid container direction="column" justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
+                    <Grid item xs={12} sm={6}>
+                        <Paper variant="elevation" elevation={3}>
+                            <Typography variant="h5" className={classes.formTitle}>
+                                Edit Game
+                            </Typography>
+                            <form onSubmit={this.onSubmit} className={classes.form}>
+                                <TextField
+                                    className={classes.textField}
+                                    label="Title"
+                                    variant="filled"
+                                    size="small"
+                                    error={this.state.errorTitle}
+                                    helperText={this.state.titleError}
+                                    name="title"
+                                    value={title}
+                                    onChange={this.handleChange}
+                                />
+                                <TextField
+                                    className={classes.textField}
+                                    label="Date"
+                                    variant="filled"
+                                    size="small"
+                                    error={this.state.errorDate}
+                                    helperText={this.state.dateError}
+                                    name="date"
+                                    value={date}
+                                    onChange={this.handleChange}
+                                />
+                                <TextField
+                                    className={classes.textField}
+                                    label="Image"
+                                    variant="filled"
+                                    size="small"
+                                    error={this.state.errorImage}
+                                    helperText={this.state.imageError}
+                                    name="image"
+                                    value={image}
+                                    onChange={this.handleChange}
+                                />
+                                <TextField
+                                    className={classes.textFieldArea}
+                                    label="Summary"
+                                    variant="filled"
+                                    size="small"
+                                    error={this.state.errorBody}
+                                    helperText={this.state.bodyError}
+                                    multiline
+                                    rows={8}
+                                    name="body"
+                                    value={summary}
+                                    onChange={this.handleChange}
+                                />
+                                <div>
+                                    <Button variant="contained" color="primary" type="submit" className={classes.submitButton}>
+                                        Update
+                                    </Button>
+                                    <Button variant="contained" color="secondary" className={classes.cancelButton} onClick={this.deleteGame}>
+                                        Delete
+                                    </Button>
+                                    <Link to="/">
+                                        <Button variant="contained" className={classes.cancelButton}>
+                                            Cancel
+                                        </Button>
+                                    </Link>
+                                </div>
+                            </form>
+                        </Paper>
+                    </Grid>
                 </Grid>
             </div>
         );
