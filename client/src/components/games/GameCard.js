@@ -23,29 +23,33 @@ class GameCard extends React.Component {
     
     render() {
         const { classes } = this.props;
+        const { id, title, date, image, summary } = this.props;
 
         return (
             <div>
                 <Card className={classes.root}>
                     <CardHeader 
-                        title={this.props.title}
-                        subheader={this.props.date}
+                        title={title}
+                        subheader={date}
                     />
                     <CardMedia 
                         className={classes.media}
                         title="Game image"
                         alt="card image"
                         component="img"
-                        image={this.props.image}
+                        image={image}
                     />
                     <CardContent>
                         <Typography component="p" className={classes.content}>
-                            {this.props.summary}
+                            {summary}
                         </Typography>
                     </CardContent>
                     <CardActions>
-                        <Link to={`/edit/${this.props.id}`}>
+                        <Link to={`/edit/${id}`}>
                             <Button color="primary">Edit</Button>
+                        </Link>
+                        <Link to={`/${id}`}>
+                            <Button color="primary">View</Button>
                         </Link>
                     </CardActions>
                 </Card>
