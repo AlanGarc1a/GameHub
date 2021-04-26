@@ -48,7 +48,7 @@ class GameCard extends React.Component {
                         <Link to={`/edit/${id}`}>
                             <Button color="primary">Edit</Button>
                         </Link>
-                        <Link to={`/${id}`}>
+                        <Link to={`/${title}/${id}`}>
                             <Button color="primary">View</Button>
                         </Link>
                     </CardActions>
