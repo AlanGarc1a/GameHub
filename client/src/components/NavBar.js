@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppBar, Toolbar, Typography, withStyles, Button } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, withStyles } from '@material-ui/core';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 import { Link } from 'react-router-dom';
 
