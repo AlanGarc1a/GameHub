@@ -1,21 +1,15 @@
 import React from 'react';
-import { Card, CardActions, Grid, Typography, Button, withStyles } from '@material-ui/core';
+import { Card, CardActions, Grid, Typography, Button, withStyles, CardContent } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 const styles = theme => ({
     card: {
         width: '500px',
-        height: '225px',
+        height: '325px',
         paddingLeft: theme.spacing(5),
         paddingRight: theme.spacing(5),
         paddingTop: theme.spacing(5),
-    },
-    img: {
-        maxWidth: '100%',
-        maxHeight: '100%',
-        backgroundSize: 'contain',
-        backgroundRepeat: 'no-repeat'
     },
     wordSpacing: {
         marginBottom: '5px'
@@ -38,7 +32,7 @@ class GameCardView extends React.Component {
         const { id } = this.props.match.params;
 
         axios.get(`http://localhost:5000/g/${id}`)
-            .then( res => {
+            .then(res => {
                 this.setState({
                     title: res.data.title,
                     date: res.data.date,
@@ -47,7 +41,7 @@ class GameCardView extends React.Component {
                 });
                 console.log(res);
             })
-            .catch( error => {
+            .catch(error => {
                 console.log('Error fetching game', error);
             });
     }
@@ -55,27 +49,24 @@ class GameCardView extends React.Component {
     render() {
 
         const { classes } = this.props;
-        const { title, date, image, summary } = this.state;
+        const { title, date, summary } = this.state;
 
         return (
             <div>
-                <Grid container direction="row" justify="center" alignItems="center" style={ { minHeight: '95vh' } }>
-                    <Grid item>
-                        <div>
-                            <img src={image}  className={classes.img} alt={title} />
-                        </div>
-                    </Grid>
+                <Grid container direction="row" justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
                     <Grid item>
                         <Card className={classes.card}>
-                            <Typography variant='subtitle1' className={classes.wordSpacing}>
-                                {title}
-                            </Typography>
-                            <Typography variant='subtitle2' color='textSecondary' className={classes.wordSpacing}>
-                                {date}
-                            </Typography>
-                            <Typography paragraph>
-                                {summary}
-                            </Typography>
+                            <CardContent>
+                                <Typography variant='subtitle1' className={classes.wordSpacing}>
+                                    {title}
+                                </Typography>
+                                <Typography variant='subtitle2' color='textSecondary' className={classes.wordSpacing}>
+                                    {date}
+                                </Typography>
+                                <Typography paragraph>
+                                    {summary}
+                                </Typography>
+                            </CardContent>
                             <CardActions>
                                 <Link to="/">
                                     <Button variant="contained" size="small" color="primary">
