@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Button, TextField, withStyles, Typography, Paper } from '@material-ui/core';
+import { Grid, Paper, TextField, Typography, withStyles, Button } from '@material-ui/core';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
@@ -7,6 +7,7 @@ const styles = theme => ({
     form: {
         display: 'flex',
         flexDirection: 'column',
+        flexWrap: 'wrap',
         width: '500px'
     },
     formTitle: {
@@ -25,10 +26,9 @@ const styles = theme => ({
     },
     submitButton: {
         margin: '0px 0px 50px 50px',
-        //width: '100px'
     },
     cancelButton: {
-        margin: '0px 0px 50px 25px'
+        margin: '0px 0px 50px 25px',
     }
 });
 
@@ -45,34 +45,33 @@ class GameCardEdit extends React.Component {
         }
     }
 
-
     componentDidMount = () => {
         const { id } = this.props.match.params;
 
         axios.get(`http://localhost:5000/g/${id}`)
-            .then( res => {
-                    this.setState({
-                        title: res.data.title,
-                        date: res.data.date,
-                        image: res.data.image,
-                        summary: res.data.summary,
-                    });
+            .then(res => {
+                this.setState({
+                    title: res.data.title,
+                    date: res.data.date,
+                    image: res.data.image,
+                    summary: res.data.summary,
+                });
             })
-            .catch( error => {
+            .catch(error => {
                 console.log(error);
             })
     }
 
     handleChange = (event) => {
         this.setState({
-            [event.target.name]: event.target.value    
+            [event.target.name]: event.target.value
         });
     }
 
     onSubmit = (event) => {
         event.preventDefault();
         const { id } = this.props.match.params;
-        
+
         const game = {
             title: this.state.title,
             date: this.state.date,
@@ -81,26 +80,26 @@ class GameCardEdit extends React.Component {
         };
 
         axios.put(`http://localhost:5000/g/update/${id}`, game)
-             .then( res => {
-                 console.log('Game updated successfully')
-                 this.setState({
-                     redirect: true
-                 });
-             })
-             .catch(error => {
-                 console.log(error)
-             });
+            .then(res => {
+                console.log('Game updated successfully')
+                this.setState({
+                    redirect: true
+                });
+            })
+            .catch(error => {
+                console.log(error)
+            });
     }
 
     deleteGame = () => {
         const { id } = this.props.match.params;
 
         axios.delete(`http://localhost:5000/g/delete/${id}`)
-            .then( res => {
+            .then(res => {
                 console.log(res);
-                this.setState({ redirect: true});
+                this.setState({ redirect: true });
             })
-            .catch( error => { console.log(error)});
+            .catch(error => { console.log(error) });
     }
 
     render() {
@@ -108,14 +107,14 @@ class GameCardEdit extends React.Component {
         const { classes } = this.props;
         const { redirect, title, date, image, summary } = this.state;
 
-        if(redirect) {
+        if (redirect) {
             return <Redirect to="/" />
         }
 
         return (
             <div>
                 <Grid container direction="column" justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
-                    <Grid item xs={12} sm={6}>
+                    <Grid item xs={12} md={6} sm={12} xl={12} lg={12}>
                         <Paper variant="elevation" elevation={3}>
                             <Typography variant="h5" className={classes.formTitle}>
                                 Edit Game
@@ -132,6 +131,7 @@ class GameCardEdit extends React.Component {
                                     value={title}
                                     onChange={this.handleChange}
                                 />
+
                                 <TextField
                                     className={classes.textField}
                                     label="Date"
