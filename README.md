@@ -15,7 +15,6 @@ this simple CRUD application where users can save their favorite games.
 * React.js
 * Node.js
 * Axios for http requests
-* Redux for state managment
 
 # Installation
 
