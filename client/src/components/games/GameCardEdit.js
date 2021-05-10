@@ -163,7 +163,7 @@ class GameCardEdit extends React.Component {
                                     helperText={this.state.bodyError}
                                     multiline
                                     rows={8}
-                                    name="body"
+                                    name="summary"
                                     value={summary}
                                     onChange={this.handleChange}
                                 />
