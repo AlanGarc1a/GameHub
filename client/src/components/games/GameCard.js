@@ -4,23 +4,28 @@ import { Link } from 'react-router-dom';
 
 const styles = theme => ({
     root: {
-        maxWidth: 350,
-        minHeight: 400
+        maxWidth: 365,
+        height: '100%'
     },
     media: {
-        height: '250px',
-        paddingTop: '25'
+        height: '350px',
+        paddingTop: '1%',
+        width: '100%',
+        objectFit: 'fill'
     },
     title: {
         marginBottom: 15
     },
     content: {
         fontSize: 14,
+    },
+    body: {
+        height: '100px'
     }
 });
 
 class GameCard extends React.Component {
-    
+
     render() {
         const { classes } = this.props;
         const { id, title, date, image, summary } = this.props;
@@ -28,21 +33,23 @@ class GameCard extends React.Component {
         return (
             <div>
                 <Card className={classes.root}>
-                    <CardHeader 
+                    <CardHeader
                         title={title}
                         subheader={date}
                     />
-                    <CardMedia 
+                    <CardMedia
                         className={classes.media}
-                        title="Game image"
-                        alt="card image"
+                        title={title}
+                        alt={title}
                         component="img"
                         image={image}
                     />
                     <CardContent>
-                        <Typography component="p" className={classes.content}>
-                            {summary}
-                        </Typography>
+                        <div className={classes.body}>
+                            <Typography component="p" className={classes.content}>
+                                {summary}
+                            </Typography>
+                        </div>
                     </CardContent>
                     <CardActions>
                         <Link to={`/edit/${id}`}>
