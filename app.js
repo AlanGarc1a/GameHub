@@ -8,6 +8,9 @@ const port    = 5000;
 //game routes
 const gameRoutes = require('./routes/gameRoute');
 
+//user routes
+const userRoutes = require('./routes/userRoutes');
+
 const { urlencoded } = require('express');
 
 mongoose.connect('mongodb://localhost:27017/gamehub', {
@@ -31,6 +34,9 @@ app.use(urlencoded({ extended: true }));
 
 //game routes
 app.use('/g', gameRoutes);
+
+//user routes
+app.use('/u', userRoutes);
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
