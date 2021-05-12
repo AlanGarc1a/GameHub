@@ -5,6 +5,8 @@ import GameCardCreate from './games/GameCardCreate';
 import GameCardEdit from './games/GameCardEdit';
 import GameCardView from './games/GameCardView';
 import NavBar from './NavBar';
+import Register from './Register';
+import Login from './Login';
 import NotFound from './NotFound';
 
 class App extends Component {
@@ -19,6 +21,8 @@ class App extends Component {
                         <Route path="/create" exact component={GameCardCreate} />
                         <Route path="/edit/:id" exact component={GameCardEdit} />
                         <Route path="/:title/:id" exact component={GameCardView} />
+                        <Route path="/register" exact component={Register} />
+                        <Route path="/login" exact component={Login} />
                         <Route path="*" exact component={NotFound} />
                     </Switch>
                 </div> 
