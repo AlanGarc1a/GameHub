@@ -15,6 +15,8 @@ this simple CRUD application where users can save their favorite games.
 * React.js
 * Node.js
 * Axios for http requests
+* bcrypt for password encrypting
+* jsonwebtoken
 
 # Installation
 
@@ -36,3 +38,5 @@ Steps to install:
 - [x] Create the server
 - [x] Create game card model
 - [x] Create the edit route
+- [x] Create user model
+- [x] Create registration route
