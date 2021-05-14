@@ -1,9 +1,11 @@
 const express       = require('express');
 const mongoose      = require('mongoose');
 const cors          = require('cors');
+require('dotenv').config();
 
 const app     = express();
-const port    = 5000;
+const port = process.env.PORT;
+const DB = process.env.DB_HOST;
 
 //game routes
 const gameRoutes = require('./routes/gameRoute');
@@ -13,7 +15,7 @@ const userRoutes = require('./routes/userRoutes');
 
 const { urlencoded } = require('express');
 
-mongoose.connect('mongodb://localhost:27017/gamehub', {
+mongoose.connect(DB, {
     useCreateIndex: true, 
     useNewUrlParser: true, 
     useUnifiedTopology: true,
@@ -38,6 +40,6 @@ app.use('/g', gameRoutes);
 //user routes
 app.use('/u', userRoutes);
 
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
+app.listen(process.env.PORT, () => {
+    console.log(`Server is listening on ${port}`);
 });
