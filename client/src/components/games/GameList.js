@@ -29,7 +29,6 @@ class GameList extends React.Component {
                         games: res.data 
                     });
                 }
-                console.log(res);
             })
             .catch(function(error){
                 console.log(error);
