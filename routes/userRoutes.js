@@ -8,6 +8,7 @@ const User = require('../models/user');
 //find the user
 router.get('/', auth, async (req, res) => {
     const user = await User.findById(req.user);
+
     res.json({
         userName: user.username,
         id: user._id,
@@ -52,14 +53,10 @@ router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        if(!email || !password) {
-            return res.status(400).json({msg: 'Not all fields have been met'});
-        }
-
         const foundUser = await User.findOne({ email });
 
         if(!foundUser) {
-            res.status(400).json({msg: `No user does not exist with that email: ${email}`});
+            res.status(400).json({msg: `No user exist with that email: ${email}`});
         }
 
         const isMatch = await foundUser.isValidPassword(password);
@@ -69,7 +66,6 @@ router.post('/login', async (req, res) => {
         }
 
         const token = signInAccessToken(foundUser._id);
-        console.log("token: ", token);
 
         res.status(200).json({
             token,
