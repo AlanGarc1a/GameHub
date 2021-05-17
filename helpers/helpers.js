@@ -7,7 +7,7 @@ module.exports = {
             id: userId
         };
 
-        return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+        return jwt.sign(payload, process.env.JWT_SECRET);
     },
     verifyAccessToken: (token) => {
         return jwt.verify(token, process.env.JWT_SECRET);
