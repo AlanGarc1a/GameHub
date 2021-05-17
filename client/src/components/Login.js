@@ -1,9 +1,14 @@
-import React, { useRef, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom'; 
+import React, { useState, useContext } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { Button, Container, FormControl, Grid, Input, InputLabel, makeStyles, Typography } from '@material-ui/core';
+import AuthContext from './store/AuthContext';
+import { Button, Container, TextField, Grid, makeStyles, Typography, Paper } from '@material-ui/core';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+    textField: {
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(2)
+    },
     submitButton: {
         marginTop: '50px'
     },
@@ -13,45 +18,66 @@ const useStyles = makeStyles({
     },
     login: {
         marginTop: '25px'
+    },
+    paper: {
+        padding: '100px'
     }
-});
+}));
 
 const Login = () => {
 
-    const emailInput = useRef();
-    const passwordInput = useRef();
+    const [emailInput, setEmail] = useState('');
+    const [passwordInput, setPassword] = useState('');
 
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
+
+    const { setUserData } = useContext(AuthContext);
 
     const history = useHistory();
 
     const classes = useStyles();
 
-    const submitHandler = (event) => {
+    const emailHandler = (event) => {
+        event.persist();
+        setEmail(event.target.value);
+    }
+
+    const passwordHandler = (event) => {
+        event.persist();
+        setPassword(event.target.value);
+    }
+
+    const submitHandler =  async (event) => {
         event.preventDefault();
 
-        const existingUser = {
-            email: emailInput.current.value,
-            password: passwordInput.current.value
-        };
+        try {
+            const existingUser = {
+                email: emailInput,
+                password: passwordInput
+            };
+    
+            if (emailInput === '') {
+                setEmailError(true);
+            }
+            if (passwordInput === '') {
+                setPasswordError(true);
+            }
+            else {
+                const loginResponse = await axios.post('http://localhost:5000/u/login', existingUser);
+    
+                setUserData({
+                    token: loginResponse.data.token,
+                    user: loginResponse.data.user
+                });
+    
+                localStorage.setItem("auth-token", loginResponse.data.token);
+                history.replace("/");
+            }
+        } catch(error) {
+            console.log(error.response.data.msg);
+        }
 
-        if(emailInput.current.value === '') {
-            setEmailError(true);
-        }
-        if(passwordInput.current.value === '') {
-            setPasswordError(true);
-        }
-        else {
-            axios.post('http://localhost:5000/u/login', existingUser)
-                 .then( res => {
-                    console.log(res);
-                    history.replace('/');
-                 })
-                 .catch( error => {
-                     console.log(error);
-                 });
-        }
     }
 
     return (
@@ -64,47 +90,60 @@ const Login = () => {
                     alignItems="center"
                     style={{ minHeight: '95vh' }}
                 >
-                    <Grid item>
-                        <Typography variant="h5">
-                            Login
-                        </Typography>
-                    </Grid>
-                    <form onSubmit={submitHandler}>
+                    <Paper elevation={6} variant="elevation" classes={{root: classes.paper}}>
                         <Grid item>
-                            <FormControl margin="normal" variant="outlined" required error={emailError}>
-                                <InputLabel htmlFor="email">Email</InputLabel>
-                                <Input id="email" type="email" ref={emailInput} />
-                            </FormControl>
+                            <Typography variant="h5" align='center'>
+                                Login
+                            </Typography>
                         </Grid>
-                        <Grid item>
-                            <FormControl margin="normal" variant="outlined" required error={passwordError}>
-                                <InputLabel htmlFor="password">Password</InputLabel>
-                                <Input id="password" type="password" ref={passwordInput} />
-                            </FormControl>
-                        </Grid>
-                        <Grid item>
-                            <div>
-                                <Button 
-                                    color="primary" 
-                                    variant="contained"
-                                    classes={{
-                                        root: classes.submitButton
-                                    }}
+                        <form onSubmit={submitHandler}>
+                            <Grid item>
+                                <TextField 
+                                    label="Email" 
+                                    type="email"
+                                    name="email"
+                                    value={emailInput}
+                                    error={emailError}
+                                    className={classes.textField}
+                                    onChange={emailHandler} 
+                                    />
+                            </Grid>
+                            <Grid item>
+                                <TextField 
+                                    label="Password" 
+                                    type="password"
+                                    name="password"
+                                    value={passwordInput}
+                                    error={passwordError}
+                                    className={classes.textField}
+                                    onChange={passwordHandler} 
+                                    />
+                            </Grid>
+                            <Grid item>
+                                <div>
+                                    <Button
+                                        color="primary"
+                                        variant="contained"
+                                        type="submit"
+                                        classes={{
+                                            root: classes.submitButton
+                                        }}
                                     >
-                                    Submit
+                                        Submit
                                 </Button>
-                            </div>
-                        </Grid>
-                    </form>
+                                </div>
+                            </Grid>
+                        </form>
+                    </Paper>
                     <Grid item>
-                        <Typography classes={{ root: classes.login}}>
+                        <Typography classes={{ root: classes.login }}>
                             New to GameHub?
                             <Link to="/register">
-                                <Button 
+                                <Button
                                     classes={{
                                         root: classes.loginButton
                                     }}
-                                    >Register
+                                >Register
                                 </Button>
                             </Link>
                         </Typography>
