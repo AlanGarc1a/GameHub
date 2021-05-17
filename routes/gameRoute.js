@@ -1,8 +1,6 @@
 const express = require('express');
 const router  = express.Router();
 
-const { auth } = require('../helpers/helpers'); 
-
 let Game = require('../models/gamecard');
 
 //get all games
@@ -53,7 +51,7 @@ router.put('/update/:id', (req, res) => {
 
 //ednpoint: http://localhost:5000/g/delete-game/:id
 //delete one game
-router.delete('/delete/:id', auth, (req, res) => {
+router.delete('/delete/:id', (req, res) => {
     const id  = req.params.id;
 
     Game.findByIdAndRemove(id)
