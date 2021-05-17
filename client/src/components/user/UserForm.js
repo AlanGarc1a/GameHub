@@ -1,9 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
-import { Link, useHistory } from 'react-router-dom'; 
-import { Button, Container, FormControl, Grid, Input, InputLabel, makeStyles, Typography } from '@material-ui/core';
+import AuthContext from '../store/AuthContext';
+import { Link, useHistory } from 'react-router-dom';
+import { Button, Container, Grid, makeStyles, Typography, Paper, TextField } from '@material-ui/core';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+    textField: {
+        marginTop: theme.spacing(3),
+        marginBottom: theme.spacing(1)
+    },
     submitButton: {
         marginTop: '50px'
     },
@@ -12,15 +17,18 @@ const useStyles = makeStyles({
         fontSize: '15px'
     },
     login: {
-        marginTop: '25px'
+        marginTop: theme.spacing(1)
+    },
+    paper: {
+        padding: '100px'
     }
-});
+}));
 
 const UserForm = () => {
 
-    const nameInput = useRef();
-    const emailInput = useRef();
-    const passwordInput = useRef();
+    const [nameInput, setName] = useState('');
+    const [emailInput, setEmail] = useState('');
+    const [passwordInput, setPassword] = useState('');
 
     const [nameError, setNameError] = useState(false);
     const [emailError, setEmailError] = useState(false);
@@ -28,36 +36,61 @@ const UserForm = () => {
 
     const history = useHistory();
 
+    const { setUserData } = useContext(AuthContext);
+
     const classes = useStyles();
 
-    const submitHandler = (event) => {
+    const submitHandler = async (event) => {
         event.preventDefault();
 
-        const newUser = {
-            name: nameInput.current.value,
-            email: emailInput.current.value,
-            password: passwordInput.current.value
-        };
+        try {
+            const newUser = {
+                username: nameInput,
+                email: emailInput,
+                password: passwordInput
+            };
+    
+            if (nameInput === '') {
+                setNameError(true);
+            }
+            if (emailInput === '') {
+                setEmailError(true);
+            }
+            if (passwordInput === '') {
+                setPasswordError(true);
+            }
+            else {
+                await axios.post('http://localhost:5000/u/register', newUser);
+                const loginResponse = await axios.post('http://localhost:5000/u/login', {
+                    email: emailInput, 
+                    password: passwordInput
+                });
+                
+                setUserData({
+                    token: loginResponse.data.token,
+                    user: loginResponse.data.userName,
+                });
+                localStorage.setItem('auth-token', loginResponse.data.token);
+                history.replace('/');
+            }
+        } catch(error) {
+            console.log(error);
+        }
+    }
 
-        if(nameInput.current.value === '') {
-            setNameError(true);
-        }
-        if(emailInput.current.value === '') {
-            setEmailError(true);
-        }
-        if(passwordInput.current.value === '') {
-            setPasswordError(true);
-        }
-        else {
-            axios.post('http://localhost:5000/u/register', newUser)
-                 .then( res => {
-                    console.log(res);
-                    history.replace('/');
-                 })
-                 .catch( error => {
-                     console.log(error);
-                 });
-        }
+    const nameHandler = (event) => {
+        event.persist();
+        setName(event.target.value);
+    }
+
+    const emailHandler = (event) => {
+        event.persist();
+        setEmail(event.target.value);
+    }
+
+    const passwordHandler = (event) => {
+        event.persist();
+        setPassword(event.target.value);
     }
 
     return (
@@ -70,53 +103,70 @@ const UserForm = () => {
                     alignItems="center"
                     style={{ minHeight: '95vh' }}
                 >
-                    <Grid item>
-                        <Typography variant="h5">
-                            Register
-                        </Typography>
-                    </Grid>
-                    <form onSubmit={submitHandler}>
+                    <Paper elevation={6} variant="elevation" classes={{root: classes.paper}}>
                         <Grid item>
-                            <FormControl margin="normal" variant="outlined" required error={nameError}>
-                                <InputLabel htmlFor="username">Username</InputLabel>
-                                <Input id="username" ref={nameInput}/>
-                            </FormControl>
+                            <Typography variant="h5" align="center">
+                                Register
+                            </Typography>
                         </Grid>
-                        <Grid item>
-                            <FormControl margin="normal" variant="outlined" required error={emailError}>
-                                <InputLabel htmlFor="email">Email</InputLabel>
-                                <Input id="email" type="email" ref={emailInput} />
-                            </FormControl>
-                        </Grid>
-                        <Grid item>
-                            <FormControl margin="normal" variant="outlined" required error={passwordError}>
-                                <InputLabel htmlFor="password">Password</InputLabel>
-                                <Input id="password" type="password" ref={passwordInput} />
-                            </FormControl>
-                        </Grid>
-                        <Grid item>
-                            <div>
-                                <Button 
-                                    color="primary" 
-                                    variant="contained"
-                                    classes={{
-                                        root: classes.submitButton
-                                    }}
-                                    >
-                                    Submit
+                        <form onSubmit={submitHandler}>
+                            <Grid item>
+                                <TextField 
+                                    label="Username" 
+                                    type="text" 
+                                    name="username" 
+                                    value={nameInput} 
+                                    error={nameError} 
+                                    className={classes.textField} 
+                                    onChange={nameHandler} 
+                                />
+                            </Grid>
+                            <Grid item>
+                                <TextField 
+                                    label="Email" 
+                                    type="email" 
+                                    name="email" 
+                                    value={emailInput} 
+                                    error={emailError} 
+                                    className={classes.textField} 
+                                    onChange={emailHandler} 
+                                    />
+                            </Grid>
+                            <Grid item>
+                                <TextField 
+                                    label="Password" 
+                                    type="password" 
+                                    name="password" 
+                                    value={passwordInput} 
+                                    error={passwordError} 
+                                    className={classes.textField} 
+                                    onChange={passwordHandler} 
+                                />
+                            </Grid>
+                            <Grid item>
+                                <div>
+                                    <Button
+                                        color="primary"
+                                        variant="contained"
+                                        type="submit"
+                                        classes={{
+                                            root: classes.submitButton
+                                        }}>
+                                        Submit
                                 </Button>
-                            </div>
-                        </Grid>
-                    </form>
+                                </div>
+                            </Grid>
+                        </form>
+                    </Paper>
                     <Grid item>
-                        <Typography classes={{ root: classes.login}}>
+                        <Typography classes={{ root: classes.login }}>
                             Already have an account?
                             <Link to="/login">
-                                <Button 
+                                <Button
                                     classes={{
                                         root: classes.loginButton
-                                    }}
-                                    >Login
+                                    }}>
+                                    Login
                                 </Button>
                             </Link>
                         </Typography>
