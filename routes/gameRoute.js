@@ -1,6 +1,8 @@
 const express = require('express');
 const router  = express.Router();
 
+const { auth } = require('../helpers/helpers'); 
+
 let Game = require('../models/gamecard');
 
 //get all games
@@ -13,7 +15,7 @@ router.get('/', (req, res) => {
 
 //endpoint: http://localhost:5000/g/create
 //create a game
-router.route('/create').post((req, res) => {
+router.post('/create', (req, res) => {
     const title = req.body.title;
     const date = req.body.date;
     const image = req.body.image;
@@ -35,13 +37,13 @@ router.route('/create').post((req, res) => {
 //get one game
 router.get('/:id', (req, res) => {
     Game.findById(req.params.id)
-        .then(game => res.json(game))
+        .then(game => res.json(game))   
         .catch(error => res.status(400).json('Error: ' + error));
 });
 
 //endpoint: http://localhost:5000/g/update/:id
 //update one game
-router.route('/update/:id').put((req, res) => {
+router.put('/update/:id', (req, res) => {
     const id = req.params.id;
 
     Game.findByIdAndUpdate(id, { $set: req.body })
@@ -51,7 +53,7 @@ router.route('/update/:id').put((req, res) => {
 
 //ednpoint: http://localhost:5000/g/delete-game/:id
 //delete one game
-router.delete('/delete/:id', (req, res) => {
+router.delete('/delete/:id', auth, (req, res) => {
     const id  = req.params.id;
 
     Game.findByIdAndRemove(id)
