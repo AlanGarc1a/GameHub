@@ -68,7 +68,7 @@ const UserForm = () => {
                 
                 setUserData({
                     token: loginResponse.data.token,
-                    user: loginResponse.data.userName,
+                    user: loginResponse.data.user,
                 });
                 localStorage.setItem('auth-token', loginResponse.data.token);
                 history.replace('/');
