@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import { AppBar, Toolbar, Typography, withStyles } from '@material-ui/core';
+import React, { useContext } from 'react';
+import { AppBar, Toolbar, Typography, makeStyles, Button } from '@material-ui/core';
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import AuthContext from './store/AuthContext';
 
-const styles = theme => ({
+const useStyles = makeStyles({
     small: {
-        width: theme.spacing(4),
-        height: theme.spacing(4),
+        width: '40px',
+        height: '40px',
         marginRight: 15
     },
     title: {
@@ -15,35 +16,62 @@ const styles = theme => ({
     icon: {
         marginRight: '10px'
     },
-    home: {
+    link: {
         textDecoration: 'none',
-        color: 'white'
-    }
+        color: 'white',
+        marginRight: '35px',
+        fontSize: '20px',
+        fontFamily: 'Roboto'
+    },
 });
 
-class NavBar extends Component {
-    constructor(props) {
-        super();
-    }
-    
-    render() {
-        const { classes } = this.props;
+const NavBar = (props) => {
 
-        return (
-            <div>
-                <AppBar position="static" color="primary">
-                    <Toolbar>
-                        <SportsEsportsIcon className={classes.icon} />
-                        <Typography variant="h6" className={classes.title} >
-                            <Link to="/" className={classes.home}>
-                                GameHub
-                            </Link>
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
-            </div>
-        );
+    const { userData, setUserData } = useContext(AuthContext);
+
+    const history = useHistory();
+
+    const logoutHandler = () => {
+        setUserData({
+            token: undefined,
+            user: undefined
+        });
+        localStorage.setItem('auth-token', "");
+        history.replace('/login');
     }
+
+    const classes = useStyles();
+
+    return (
+        <div>
+            <AppBar position="static" color="primary">
+                <Toolbar>
+                    <SportsEsportsIcon classes={{ root: classes.icon }} />
+                    <Typography variant="h6" classes={{ root: classes.title }} >
+                        GameHub
+                    </Typography>
+                    {!userData.user && (
+                        <Link to='/register'>
+                            <Typography className={classes.link}>
+                                Register
+                            </Typography>
+                        </Link>
+                    )}
+                    {userData.user && (
+                        <Link to="/profile" className={classes.link}>
+                            <p>{userData.user.userName}</p>
+                        </Link>
+                    )}
+                    {userData.user && (
+                        <Button variant="contained" color="default" onClick={logoutHandler}>
+                            Logout
+                        </Button>
+                    )}
+                </Toolbar>
+            </AppBar>
+        </div>
+    );
+
 };
 
-export default withStyles(styles)(NavBar);
+export default NavBar;
