@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid, Paper, TextField, Typography, withStyles, Button } from '@material-ui/core';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
+import AuthContext from '../store/AuthContext';
 
 const styles = theme => ({
     form: {
@@ -44,6 +45,8 @@ class GameCardEdit extends React.Component {
             summary: '',
         }
     }
+
+    static contextType = AuthContext;
 
     componentDidMount = () => {
         const { id } = this.props.match.params;
@@ -111,79 +114,89 @@ class GameCardEdit extends React.Component {
             return <Redirect to="/" />
         }
 
+        const { userData } = this.context;
+
         return (
             <div>
-                <Grid container direction="column" justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
-                    <Grid item xs={12} md={6} sm={12} xl={12} lg={12}>
-                        <Paper variant="elevation" elevation={3}>
-                            <Typography variant="h5" className={classes.formTitle}>
-                                Edit Game
-                            </Typography>
-                            <form onSubmit={this.onSubmit} className={classes.form}>
-                                <TextField
-                                    className={classes.textField}
-                                    label="Title"
-                                    variant="filled"
-                                    size="small"
-                                    error={this.state.errorTitle}
-                                    helperText={this.state.titleError}
-                                    name="title"
-                                    value={title}
-                                    onChange={this.handleChange}
-                                />
+                { userData.user ?
+                    <Grid container direction="column" justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
+                        <Grid item xs={12} md={6} sm={12} xl={12} lg={12}>
+                            <Paper variant="elevation" elevation={3}>
+                                <Typography variant="h5" className={classes.formTitle}>
+                                    Edit Game
+                                </Typography>
+                                <form onSubmit={this.onSubmit} className={classes.form}>
+                                    <TextField
+                                        className={classes.textField}
+                                        label="Title"
+                                        variant="filled"
+                                        size="small"
+                                        error={this.state.errorTitle}
+                                        helperText={this.state.titleError}
+                                        name="title"
+                                        value={title}
+                                        onChange={this.handleChange}
+                                    />
 
-                                <TextField
-                                    className={classes.textField}
-                                    label="Date"
-                                    variant="filled"
-                                    size="small"
-                                    error={this.state.errorDate}
-                                    helperText={this.state.dateError}
-                                    name="date"
-                                    value={date}
-                                    onChange={this.handleChange}
-                                />
-                                <TextField
-                                    className={classes.textField}
-                                    label="Image"
-                                    variant="filled"
-                                    size="small"
-                                    error={this.state.errorImage}
-                                    helperText={this.state.imageError}
-                                    name="image"
-                                    value={image}
-                                    onChange={this.handleChange}
-                                />
-                                <TextField
-                                    className={classes.textFieldArea}
-                                    label="Summary"
-                                    variant="filled"
-                                    size="small"
-                                    error={this.state.errorBody}
-                                    helperText={this.state.bodyError}
-                                    multiline
-                                    rows={8}
-                                    name="summary"
-                                    value={summary}
-                                    onChange={this.handleChange}
-                                />
-                                <div>
-                                    <Button variant="contained" color="primary" type="submit" className={classes.submitButton}>
-                                        Update
+                                    <TextField
+                                        className={classes.textField}
+                                        label="Date"
+                                        variant="filled"
+                                        size="small"
+                                        error={this.state.errorDate}
+                                        helperText={this.state.dateError}
+                                        name="date"
+                                        value={date}
+                                        onChange={this.handleChange}
+                                    />
+                                    <TextField
+                                        className={classes.textField}
+                                        label="Image"
+                                        variant="filled"
+                                        size="small"
+                                        error={this.state.errorImage}
+                                        helperText={this.state.imageError}
+                                        name="image"
+                                        value={image}
+                                        onChange={this.handleChange}
+                                    />
+                                    <TextField
+                                        className={classes.textFieldArea}
+                                        label="Summary"
+                                        variant="filled"
+                                        size="small"
+                                        error={this.state.errorBody}
+                                        helperText={this.state.bodyError}
+                                        multiline
+                                        rows={8}
+                                        name="summary"
+                                        value={summary}
+                                        onChange={this.handleChange}
+                                    />
+                                    <div>
+                                        <Button variant="contained" color="primary" type="submit" className={classes.submitButton}>
+                                            Update
                                     </Button>
-                                    <Button variant="contained" color="secondary" className={classes.cancelButton} onClick={this.deleteGame}>
-                                        Delete
+                                        <Button variant="contained" color="secondary" className={classes.cancelButton} onClick={this.deleteGame}>
+                                            Delete
                                     </Button>
-                                    <Link to="/">
-                                        <Button variant="contained" className={classes.cancelButton}>
-                                            Cancel
+                                        <Link to="/">
+                                            <Button variant="contained" className={classes.cancelButton}>
+                                                Cancel
                                         </Button>
-                                    </Link>
-                                </div>
-                            </form>
-                        </Paper>
+                                        </Link>
+                                    </div>
+                                </form>
+                            </Paper>
+                        </Grid>
                     </Grid>
-                </Grid>
+                    : 
+                    <Grid container justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
+                        <Typography variant="h4">
+                            You must be logged in to edit a Game.
+                        </Typography>
+                    </Grid>
+                }
             </div>
         );
     }

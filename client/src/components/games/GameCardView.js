@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardActions, Grid, Typography, Button, withStyles, CardContent } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import AuthContext from '../store/AuthContext';
 import axios from 'axios';
 
 const styles = theme => ({
@@ -28,6 +29,8 @@ class GameCardView extends React.Component {
         }
     }
 
+    static contextType = AuthContext;
+
     componentDidMount() {
         const { id } = this.props.match.params;
 
@@ -50,33 +53,42 @@ class GameCardView extends React.Component {
 
         const { classes } = this.props;
         const { title, date, summary } = this.state;
+        const { userData } = this.context;
 
         return (
             <div>
-                <Grid container direction="row" justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
-                    <Grid item>
-                        <Card className={classes.card}>
-                            <CardContent>
-                                <Typography variant='subtitle1' className={classes.wordSpacing}>
-                                    {title}
-                                </Typography>
-                                <Typography variant='subtitle2' color='textSecondary' className={classes.wordSpacing}>
-                                    {date}
-                                </Typography>
-                                <Typography paragraph>
-                                    {summary}
-                                </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Link to="/">
-                                    <Button variant="contained" size="small" color="primary">
-                                        Go Back
-                                    </Button>
-                                </Link>
-                            </CardActions>
-                        </Card>
+                { userData.user ?
+
+                    <Grid container direction="row" justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
+                        <Grid item>
+                            <Card className={classes.card}>
+                                <CardContent>
+                                    <Typography variant='subtitle1' className={classes.wordSpacing}>
+                                        {title}
+                                    </Typography>
+                                    <Typography variant='subtitle2' color='textSecondary' className={classes.wordSpacing}>
+                                        {date}
+                                    </Typography>
+                                    <Typography paragraph>
+                                        {summary}
+                                    </Typography>
+                                </CardContent>
+                                <CardActions>
+                                    <Link to="/">
+                                        <Button variant="contained" size="small" color="primary">
+                                            Go Back
+                                        </Button>
+                                    </Link>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+                    </Grid> :
+                    <Grid container justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
+                        <Typography variant="h4">
+                            You must be logged in to view your saved Games.
+                        </Typography>
                     </Grid>
-                </Grid>
+                }
             </div>
         );
     }
