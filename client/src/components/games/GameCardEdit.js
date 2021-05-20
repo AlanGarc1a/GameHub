@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Paper, TextField, Typography, withStyles, Button } from '@material-ui/core';
+import { Grid, Paper, TextField, Typography, withStyles, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../store/AuthContext';
@@ -43,6 +43,7 @@ class GameCardEdit extends React.Component {
             date: '',
             image: '',
             summary: '',
+            open: false
         }
     }
 
@@ -100,9 +101,43 @@ class GameCardEdit extends React.Component {
         axios.delete(`http://localhost:5000/g/delete/${id}`)
             .then(res => {
                 console.log(res);
-                this.setState({ redirect: true });
+                this.setState({ redirect: true, open: false });
             })
             .catch(error => { console.log(error) });
+    }
+
+    handleDialog = () => {
+        this.setState({ open: true });
+    }
+
+    closeDialog = () => {
+        this.setState({ open: false });
+    }
+
+    ShowDialog = () => {
+        return (
+            <Dialog onClose={this.closeDialog} open={this.state.open}>
+                <DialogTitle onClose={this.closeDialog}>
+                    Are you sure you want to delete this game?
+                </DialogTitle>
+                <DialogContent dividers>
+                    <Typography gutterBottom>
+                        {this.state.title}
+                    </Typography>
+                    <Typography gutterBottom>
+                        {this.state.summary}
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button color="secondary" type="submit" onClick={this.deleteGame}>
+                        Delete Game
+                    </Button>
+                    <Button color="default" type="submit" onClick={this.closeDialog}>
+                        Cancel
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        );
     }
 
     render() {
@@ -119,6 +154,8 @@ class GameCardEdit extends React.Component {
         return (
             <div>
                 { userData.user ?
+                    <>
+                    {this.ShowDialog()}
                     <Grid container direction="column" justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
                         <Grid item xs={12} md={6} sm={12} xl={12} lg={12}>
                             <Paper variant="elevation" elevation={3}>
@@ -137,7 +174,6 @@ class GameCardEdit extends React.Component {
                                         value={title}
                                         onChange={this.handleChange}
                                     />
-
                                     <TextField
                                         className={classes.textField}
                                         label="Date"
@@ -176,21 +212,20 @@ class GameCardEdit extends React.Component {
                                     <div>
                                         <Button variant="contained" color="primary" type="submit" className={classes.submitButton}>
                                             Update
-                                    </Button>
-                                        <Button variant="contained" color="secondary" className={classes.cancelButton} onClick={this.deleteGame}>
+                                        </Button>
+                                        <Button variant="contained" color="secondary" className={classes.cancelButton} onClick={this.handleDialog}>
                                             Delete
-                                    </Button>
+                                        </Button>
                                         <Link to="/">
                                             <Button variant="contained" className={classes.cancelButton}>
                                                 Cancel
-                                        </Button>
+                                            </Button>
                                         </Link>
                                     </div>
                                 </form>
                             </Paper>
                         </Grid>
-                    </Grid>
-                    : 
+                    </Grid> </> :
                     <Grid container justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
                         <Typography variant="h4">
                             You must be logged in to edit a Game.
