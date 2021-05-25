@@ -5,58 +5,102 @@ let Game = require('../models/gamecard');
 
 //get all games
 //endpoint: http://localhost:5000/g/
-router.get('/', (req, res) => {
-    Game.find()
-        .then( games => res.json(games))
-        .catch(error => res.status(400).json('Error: ' + error));
+router.get('/', async (req, res) => {
+    try {
+        let games = await Game.find({});
+
+        if(!games) {
+            res.json({ msg: 'No games found' });
+        }
+
+        res.json(games);
+
+    } catch(error) {
+        res.json({ error:  error });
+    }
 });
 
 //endpoint: http://localhost:5000/g/create
 //create a game
-router.post('/create', (req, res) => {
-    const title = req.body.title;
-    const date = req.body.date;
-    const image = req.body.image;
-    const summary = req.body.body;
+router.post('/create', async (req, res) => {
+    const { title, date, image, body } = req.body;
 
-    const game = new Game({
-        title,
-        date,
-        image, 
-        summary
-    });
+    try {
+        const game = new Game({
+            title: title,
+            date: date,
+            image: image,
+            summary: body
+        });
+    
+        let savedGame = await game.save();
+    
+        if(!savedGame) {
+            res.status(400).json('Error:' + error);
+        }
+        res.json('Game added');
 
-    game.save()
-        .then( () => res.json('Game added'))
-        .catch( error => res.status(400).json('Error: ' + error));
+    } catch(error) {
+        res.status(400).json('Error:' + error);
+    }
+
 });
 
 //endpoint: http://localhost:5000/g/:id
 //get one game
-router.get('/:id', (req, res) => {
-    Game.findById(req.params.id)
-        .then(game => res.json(game))   
-        .catch(error => res.status(400).json('Error: ' + error));
+router.get('/:id', async (req, res) => {
+
+    const id = req.params.id;
+
+    try {
+        let foundGame = await Game.findById(id);
+
+        if(!foundGame) {
+            res.json('No Game exists');
+        }
+        
+        res.json(foundGame);
+
+    } catch(error) {
+        res.status(400).json('Error: ' + error);
+    }
 });
 
 //endpoint: http://localhost:5000/g/update/:id
 //update one game
-router.put('/update/:id', (req, res) => {
+router.put('/update/:id', async (req, res) => {
+
     const id = req.params.id;
 
-    Game.findByIdAndUpdate(id, { $set: req.body })
-        .then(() => { res.json('Game updated')})
-        .catch(error => res.status(400).json('Error: ' + error));
+    try {
+        let updateGame = await Game.findByIdAndUpdate(id, { $set: req.body });
+
+        if(!updateGame) {
+            res.json({ msg: 'Could not update Game'})
+        }
+
+        res.json(updateGame);
+
+    } catch(error) {
+        res.status(400).json('Error:' + error);
+    }
 });
 
 //ednpoint: http://localhost:5000/g/delete-game/:id
 //delete one game
-router.delete('/delete/:id', (req, res) => {
+router.delete('/delete/:id', async (req, res) => {
     const id  = req.params.id;
 
-    Game.findByIdAndRemove(id)
-        .then( () => { res.json('Game deleted') })
-        .catch( error => res.status(400).json('Error: ' + error) );
+    try {
+        let removedGame = await Game.findByIdAndRemove(id);
+
+        if(!removedGame) {
+            res.json({ msg: 'Could not delete Game'})
+        }
+        res.json({msg: 'Game deleted'})
+    } catch(error) {
+        res.status(400).json('Error:' + error);
+    }
 });
 
 module.exports = router;
