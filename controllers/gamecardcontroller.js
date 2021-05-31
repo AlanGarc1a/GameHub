@@ -4,15 +4,15 @@ module.exports = {
     index: async (req, res) => {
         try {
             let games = await Game.find({});
-    
-            if(!games) {
+
+            if(!games){
                 res.json({ msg: 'No games found' });
             }
-    
+
             res.json(games);
-    
+            
         } catch(error) {
-            res.json({ error:  error });
+            res.json({ erro: error});
         }
     },
     create: async (req, res) => {
