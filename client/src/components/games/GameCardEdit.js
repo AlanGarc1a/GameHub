@@ -1,37 +1,65 @@
 import React from 'react';
-import { Grid, Paper, TextField, Typography, withStyles, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
+import { Grid, Paper, TextField, Typography, withStyles, Button, Dialog, DialogTitle, DialogContent, DialogActions, Container } from '@material-ui/core';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../store/AuthContext';
 
 const styles = theme => ({
-    form: {
-        display: 'flex',
-        flexDirection: 'column',
-        flexWrap: 'wrap',
-        width: '500px'
-    },
-    formTitle: {
-        textAlign: 'center',
-        padding: '25px 0px 25px 0px'
-    },
     textField: {
-        marginBottom: theme.spacing(1),
-        marginLeft: theme.spacing(5),
-        marginRight: theme.spacing(5),
-    },
-    textFieldArea: {
-        marginBottom: theme.spacing(5),
-        marginLeft: theme.spacing(5),
-        marginRight: theme.spacing(5),
+        marginBottom: theme.spacing(3)
     },
     submitButton: {
-        margin: '0px 0px 50px 50px',
+        margin: '10px 0px 50px 50px',
     },
     cancelButton: {
-        margin: '0px 0px 50px 25px',
-    }
+        margin: '10px 0px 50px 25px',
+    },
+    deleteButton: {
+        margin: '10px 0px 50px 25px',
+    },
+    paper: {
+        paddingTop: '100px',
+        paddingBottom: '100px',
+        paddingLeft: '85px',
+        paddingRight: '85px',
+        width: '30%'
+    },
 });
+
+const genres = [
+    {
+        key: 'Ad',
+        label: 'Adventure'
+    },
+    {
+        key: 'Ar',
+        label: 'Arcade'
+    },
+    {
+        key: 'Fi',
+        label: 'Fighting'
+    },
+    {
+        key: 'H',
+        label: 'Horror'
+    },
+    {
+        key: 'St',
+        label: 'Strategy'
+    },
+    {
+        key: 'Sh',
+        label: 'Shooter'
+    },
+    {
+        key: 'Pl',
+        label: 'Platformer'
+    },
+    {
+        key: 'Ot',
+        label: 'Other'
+    },
+]
 
 class GameCardEdit extends React.Component {
 
@@ -42,6 +70,7 @@ class GameCardEdit extends React.Component {
             title: '',
             date: '',
             image: '',
+            genre: '',
             summary: '',
             open: false
         }
@@ -58,6 +87,7 @@ class GameCardEdit extends React.Component {
                     title: res.data.title,
                     date: res.data.date,
                     image: res.data.image,
+                    genre: res.data.genre,
                     summary: res.data.summary,
                 });
             })
@@ -80,6 +110,7 @@ class GameCardEdit extends React.Component {
             title: this.state.title,
             date: this.state.date,
             image: this.state.image,
+            genre: this.state.genre,
             summary: this.state.summary
         };
 
@@ -125,6 +156,9 @@ class GameCardEdit extends React.Component {
                         {this.state.title}
                     </Typography>
                     <Typography gutterBottom>
+                        Genre: {this.state.genre}
+                    </Typography>
+                    <Typography gutterBottom>
                         {this.state.summary}
                     </Typography>
                 </DialogContent>
@@ -143,7 +177,7 @@ class GameCardEdit extends React.Component {
     render() {
 
         const { classes } = this.props;
-        const { redirect, title, date, image, summary } = this.state;
+        const { redirect, title, date, image, genre, summary } = this.state;
 
         if (redirect) {
             return <Redirect to="/" />
@@ -156,79 +190,118 @@ class GameCardEdit extends React.Component {
                 { userData.user ?
                     <>
                     {this.ShowDialog()}
-                    <Grid container direction="column" justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
-                        <Grid item xs={12} md={6} sm={12} xl={12} lg={12}>
-                            <Paper variant="elevation" elevation={3}>
-                                <Typography variant="h5" className={classes.formTitle}>
-                                    Edit Game
+                    <Container style={{ minHeight: '95vh' }}>
+                        <Grid
+                            container
+                            direction="column"
+                            justify="center"
+                            alignItems="center"
+                            style={{ minHeight: '95vh' }}
+                        >
+                            <Paper variant="elevation" elevation={6} className={classes.paper}>
+                                <Grid item>
+                                    <Typography variant="h5" align="center" className={classes.title}>
+                                        New Game
                                 </Typography>
-                                <form onSubmit={this.onSubmit} className={classes.form}>
-                                    <TextField
-                                        className={classes.textField}
-                                        label="Title"
-                                        variant="filled"
-                                        size="small"
-                                        error={this.state.errorTitle}
-                                        helperText={this.state.titleError}
-                                        name="title"
-                                        value={title}
-                                        onChange={this.handleChange}
-                                    />
-                                    <TextField
-                                        className={classes.textField}
-                                        label="Date"
-                                        variant="filled"
-                                        size="small"
-                                        error={this.state.errorDate}
-                                        helperText={this.state.dateError}
-                                        name="date"
-                                        value={date}
-                                        onChange={this.handleChange}
-                                    />
-                                    <TextField
-                                        className={classes.textField}
-                                        label="Image"
-                                        variant="filled"
-                                        size="small"
-                                        error={this.state.errorImage}
-                                        helperText={this.state.imageError}
-                                        name="image"
-                                        value={image}
-                                        onChange={this.handleChange}
-                                    />
-                                    <TextField
-                                        className={classes.textFieldArea}
-                                        label="Summary"
-                                        variant="filled"
-                                        size="small"
-                                        error={this.state.errorBody}
-                                        helperText={this.state.bodyError}
-                                        multiline
-                                        rows={8}
-                                        name="summary"
-                                        value={summary}
-                                        onChange={this.handleChange}
-                                    />
-                                    <div>
+                                </Grid>
+                                <form onSubmit={this.onSubmit}>
+                                    <Grid item>
+                                        <TextField
+                                            label="Title"
+                                            variant="filled"
+                                            size="small"
+                                            error={this.state.titleError}
+                                            name="title"
+                                            value={title}
+                                            onChange={this.handleChange}
+                                            fullWidth
+                                            className={classes.textField}
+                                        />
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField
+                                            label="Year"
+                                            variant="filled"
+                                            size="small"
+                                            error={this.state.dateError}
+                                            name="date"
+                                            value={date}
+                                            onChange={this.handleChange}
+                                            fullWidth
+                                            className={classes.textField}
+                                        />
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField
+                                            label="Image"
+                                            variant="filled"
+                                            size="small"
+                                            error={this.state.imageError}
+                                            name="image"
+                                            value={image}
+                                            onChange={this.handleChange}
+                                            fullWidth
+                                            className={classes.textField}
+                                        />
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField
+                                            id="standard-select-genre-native"
+                                            label='Genre'
+                                            name="genre"
+                                            value={genre}
+                                            onChange={this.handleChange}
+                                            error={this.state.genreError}
+                                            helperText="Please select genre"
+                                            select
+                                            fullWidth
+                                            SelectProps={{
+                                                native: true,
+                                            }}
+                                            className={classes.textField}
+                                        >
+                                            {genres.map(option => (
+                                                <option key={option.key} value={option.value}>
+                                                    {option.label}
+                                                </option>
+                                            ))}
+                                        </TextField>
+                                    </Grid>
+                                    <Grid item>
+                                        <TextField
+                                            label="Summary"
+                                            variant="filled"
+                                            size="small"
+                                            error={this.state.bodyError}
+                                            multiline
+                                            rows={8}
+                                            name="summary"
+                                            value={summary}
+                                            onChange={this.handleChange}
+                                            fullWidth
+                                            className={classes.textField}
+                                        />
+                                    </Grid>
+                                    <Grid item>
                                         <Button variant="contained" color="primary" type="submit" className={classes.submitButton}>
-                                            Update
+                                            Submit
                                         </Button>
-                                        <Button variant="contained" color="secondary" className={classes.cancelButton} onClick={this.handleDialog}>
+                                        <Button variant="contained" color="secondary" className={classes.deleteButton} onClick={this.handleDialog}>
                                             Delete
                                         </Button>
                                         <Link to="/">
-                                            <Button variant="contained" className={classes.cancelButton}>
+                                            <Button variant="contained" color="default" className={classes.cancelButton}>
                                                 Cancel
                                             </Button>
                                         </Link>
-                                    </div>
+                                    </Grid>
                                 </form>
                             </Paper>
                         </Grid>
-                    </Grid> </> :
+                    </Container> </> :
                     <Grid container justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
                         <Typography variant="h4">
-                            You must be logged in to edit a Game.
+                            You must be logged in to create a Game.
                         </Typography>
                     </Grid>
                 }

@@ -25,6 +25,7 @@ class GameCardView extends React.Component {
             title: '',
             date: '',
             image: '',
+            genre: '',
             summary: ''
         }
     }
@@ -39,6 +40,7 @@ class GameCardView extends React.Component {
                 this.setState({
                     title: res.data.title,
                     date: res.data.date,
+                    genre: res.data.genre,
                     image: res.data.image,
                     summary: res.data.summary,
                 });
@@ -52,7 +54,7 @@ class GameCardView extends React.Component {
     render() {
 
         const { classes } = this.props;
-        const { title, date, summary } = this.state;
+        const { title, date, genre, summary } = this.state;
         const { userData } = this.context;
 
         return (
@@ -68,6 +70,9 @@ class GameCardView extends React.Component {
                                     </Typography>
                                     <Typography variant='subtitle2' color='textSecondary' className={classes.wordSpacing}>
                                         {date}
+                                    </Typography>
+                                    <Typography variant='subtitle2' color='textSecondary' className={classes.wordSpacing}>
+                                        Genre: {genre}
                                     </Typography>
                                     <Typography paragraph>
                                         {summary}

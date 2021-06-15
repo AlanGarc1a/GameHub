@@ -4,6 +4,41 @@ import { Link, Redirect } from "react-router-dom";
 import AuthContext from '../store/AuthContext';
 import axios from "axios";
 
+const genres = [
+    {
+        key: 'Ad',
+        label: 'Adventure'
+    },
+    {
+        key: 'Ar',
+        label: 'Arcade'
+    },
+    {
+        key: 'Fi',
+        label: 'Fighting'
+    },
+    {
+        key: 'H',
+        label: 'Horror'
+    },
+    {
+        key: 'St',
+        label: 'Strategy'
+    },
+    {
+        key: 'Sh',
+        label: 'Shooter'
+    },
+    {
+        key: 'Pl',
+        label: 'Platformer'
+    },
+    {
+        key: 'Ot',
+        label: 'Other'
+    },
+]
+
 const useStyles = makeStyles((theme) => ({
     paper: {
         paddingTop: '100px',
@@ -27,13 +62,15 @@ const GameCardCreate = () => {
 
     const [title, setTitle] = useState('');
     const [image, setImage] = useState('');
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState(0);
     const [body, setBody] = useState('');
+    const [genre, setGenre] = useState('');
 
     const [titleError, setTitleError] = useState(false);
     const [dateError, setDateError] = useState(false);
     const [imageError, setImageError] = useState(false);
     const [bodyError, setBodyError] = useState(false);
+    const [genreError, setGenreError] = useState(false);
     const [redirect, setRedirect] = useState(false);
 
     const { userData } = useContext(AuthContext);
@@ -53,6 +90,11 @@ const GameCardCreate = () => {
         setDate(event.target.value);
     }
 
+    const genreHandler = (event) => {
+        event.persist();
+        setGenre(event.target.value);
+    }
+
     const bodyHandler = (event) => {
         event.persist();
         setBody(event.target.value);
@@ -65,6 +107,7 @@ const GameCardCreate = () => {
             title: title,
             date: date,
             image: image,
+            genre: genre,
             body: body,
         };
 
@@ -79,6 +122,9 @@ const GameCardCreate = () => {
         }
         if (body === '') {
             setBodyError(true);
+        }
+        if(genre === '') {
+            setGenreError(true);
         }
         else {
             axios.post("http://localhost:5000/g/create", game)
@@ -130,7 +176,7 @@ const GameCardCreate = () => {
                                 </Grid>
                                 <Grid item>
                                     <TextField
-                                        label="Date"
+                                        label="Year"
                                         variant="filled"
                                         size="small"
                                         error={dateError}
@@ -153,6 +199,28 @@ const GameCardCreate = () => {
                                         fullWidth
                                         className={classes.textField}
                                     />
+                                </Grid>
+                                <Grid item>
+                                    <TextField
+                                        id="standard-select-genre-native"
+                                        label='Genre'
+                                        value={genre}
+                                        onChange={genreHandler}
+                                        error={genreError}
+                                        helperText="Please select genre"
+                                        select
+                                        fullWidth
+                                        SelectProps={{
+                                            native: true,
+                                        }}
+                                        className={classes.textField}
+                                    >
+                                        {genres.map( option => (
+                                                <option key={option.key} value={option.value}>
+                                                    {option.label}
+                                                </option>
+                                        ))}
+                                    </TextField>        
                                 </Grid>
                                 <Grid item>
                                     <TextField

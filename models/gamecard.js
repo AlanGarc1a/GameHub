@@ -7,11 +7,16 @@ const gameCardSchema = new Schema({
         required: true
     },
     date: { 
-        type: String, 
+        type: Number, 
         required: true
     },
     image: { 
         type: String,
+        required: true
+    },
+    genre: {
+        type: String,
+        enum: ['Adventure', 'Arcade', 'Fighting', 'Horror', 'Strategy', 'Shooter', 'Platformer', 'Other'],
         required: true
     },
     summary: { 

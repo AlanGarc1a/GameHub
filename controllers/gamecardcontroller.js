@@ -16,13 +16,14 @@ module.exports = {
         }
     },
     create: async (req, res) => {
-        const { title, date, image, body } = req.body;
+        const { title, date, image, genre, body } = req.body;
     
         try {
             const game = new Game({
                 title: title,
                 date: date,
                 image: image,
+                genre: genre,
                 summary: body
             });
         
