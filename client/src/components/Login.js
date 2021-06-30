@@ -26,10 +26,10 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
 
-    const [emailInput, setEmail] = useState('');
+    const [usernameInput, setUsername] = useState('');
     const [passwordInput, setPassword] = useState('');
 
-    const [emailError, setEmailError] = useState(false);
+    const [userNameError, setUsernameError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
 
     const { setUserData } = useContext(AuthContext);
@@ -38,9 +38,9 @@ const Login = () => {
 
     const classes = useStyles();
 
-    const emailHandler = (event) => {
+    const usernameHandler = (event) => {
         event.persist();
-        setEmail(event.target.value);
+        setUsername(event.target.value);
     }
 
     const passwordHandler = (event) => {
@@ -53,12 +53,12 @@ const Login = () => {
 
         try {
             const existingUser = {
-                email: emailInput,
+                username: usernameInput,
                 password: passwordInput
             };
     
-            if (emailInput === '') {
-                setEmailError(true);
+            if (usernameInput === '') {
+                setUsernameError(true);
             }
             if (passwordInput === '') {
                 setPasswordError(true);
@@ -67,11 +67,9 @@ const Login = () => {
                 const loginResponse = await axios.post('http://localhost:5000/u/login', existingUser);
     
                 setUserData({
-                    token: loginResponse.data.token,
-                    user: loginResponse.data.user
+                    user: loginResponse.data
                 });
-    
-                localStorage.setItem("auth-token", loginResponse.data.token);
+                
                 history.replace("/");
             }
         } catch(error) {
@@ -99,13 +97,13 @@ const Login = () => {
                         <form onSubmit={submitHandler}>
                             <Grid item>
                                 <TextField 
-                                    label="Email" 
-                                    type="email"
-                                    name="email"
-                                    value={emailInput}
-                                    error={emailError}
+                                    label="username" 
+                                    type="text"
+                                    name="username"
+                                    value={usernameInput}
+                                    error={userNameError}
                                     className={classes.textField}
-                                    onChange={emailHandler} 
+                                    onChange={usernameHandler} 
                                     />
                             </Grid>
                             <Grid item>

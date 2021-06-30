@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import Home from './Home';
 import GameCardCreate from './games/GameCardCreate';
@@ -9,41 +9,12 @@ import Register from './Register';
 import Login from './Login';
 import NotFound from './NotFound';
 import AuthContext from './store/AuthContext';
-import axios from 'axios';
 
 function App() {
 
     const [userData, setUserData] = useState({
-        token: undefined,
         user: undefined,
     });
-
-    useEffect(() => {
-
-        const checkLoggedIn = async () => {
-            let token = localStorage.getItem("auth-token");
-
-            if (token === null) {
-                localStorage.setItem("auth-token", "");
-                token = "";
-            }
-
-            const tokenResponse = await axios.post('http://localhost:5000/u/tokenIsValid', null, { headers: {"x-auth-token": token} });
-            
-            if (tokenResponse.data) {
-                const userRes = await axios.get('http://localhost:5000/u/', {
-                    headers: { "x-auth-token": token },
-                });
-
-                setUserData({
-                    token,
-                    user: userRes.data,
-                });
-            }
-        }
-
-        checkLoggedIn();
-    }, []);
 
     return (
         <BrowserRouter>

@@ -25,7 +25,7 @@ const useStyles = makeStyles({
     },
 });
 
-const NavBar = (props) => {
+const NavBar = () => {
 
     const { userData, setUserData } = useContext(AuthContext);
 
@@ -33,10 +33,8 @@ const NavBar = (props) => {
 
     const logoutHandler = () => {
         setUserData({
-            token: undefined,
             user: undefined
         });
-        localStorage.setItem('auth-token', "");
         history.replace('/login');
     }
 
@@ -59,7 +57,7 @@ const NavBar = (props) => {
                     )}
                     {userData.user && (
                         <Link to="/profile" className={classes.link}>
-                            <p>{userData.user.userName}</p>
+                            <p>{userData.user.username}</p>
                         </Link>
                     )}
                     {userData.user && (

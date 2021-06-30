@@ -60,17 +60,12 @@ const UserForm = () => {
                 setPasswordError(true);
             }
             else {
-                await axios.post('http://localhost:5000/u/register', newUser);
-                const loginResponse = await axios.post('http://localhost:5000/u/login', {
-                    email: emailInput, 
-                    password: passwordInput
-                });
+                const registerRes = await axios.post('http://localhost:5000/u/register', newUser);
                 
                 setUserData({
-                    token: loginResponse.data.token,
-                    user: loginResponse.data.user,
+                    user: registerRes.data,
                 });
-                localStorage.setItem('auth-token', loginResponse.data.token);
+
                 history.replace('/');
             }
         } catch(error) {
