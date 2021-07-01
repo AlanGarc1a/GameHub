@@ -6,28 +6,71 @@ GameHub is a single page web application where users can create, update, view, a
 
 I have been using HTML5, CSS3, and JavaScript to build user interfaces for web applications. I wanted to learn the Full Stack of Web applications
 and so I decided to learn different technologies to use in order to build one. I decided to learn the MERN stack and built
-this simple CRUD application where users can save their favorite games.
+this CRUD application where users can upload their favorite games.
 
-# Technologies
+# Project Structure
 
-* Express.js
-* Mongoose.js
-* React.js
-* Node.js
-* Axios for http requests
-* bcrypt for password encrypting
-* jsonwebtoken
+```
+ client 
+
+📦src                         // entry point for the React client side application
+ ┣ 📂components
+ ┃ ┣ 📂games
+ ┃ ┃ ┣ 📜GameCard.js
+ ┃ ┃ ┣ 📜GameCardCreate.js
+ ┃ ┃ ┣ 📜GameCardEdit.js
+ ┃ ┃ ┣ 📜GameCardView.js
+ ┃ ┃ ┗ 📜GameList.js
+ ┃ ┣ 📂store
+ ┃ ┃ ┗ 📜AuthContext.js
+ ┃ ┣ 📂user
+ ┃ ┃ ┗ 📜UserForm.js
+ ┃ ┣ 📜App.js
+ ┃ ┣ 📜Home.js
+ ┃ ┣ 📜Login.js
+ ┃ ┣ 📜NavBar.js
+ ┃ ┣ 📜NotFound.js
+ ┃ ┗ 📜Register.js
+ ┗ 📜index.js
+
+ server
+
+ 📦controllers                  // controllers for routes
+ ┣ 📜gamecardcontroller.js
+ ┗ 📜usercontroller.js
+
+ 📦models                       // represents data from our database
+ ┣ 📜gamecard.js                // schema for gamecard collection
+ ┗ 📜user.js                    // schema for user collection
+
+ 📦routes                       // fodler containing all routes
+ ┣ 📜gameRoute.js               // routes for gamecard
+ ┗ 📜userRoutes.js              // routes for user
+
+ app.js                         // the entry point for running the backend server
+
+```
 
 # Installation
 
-Steps to install:
+To run the application you will need to:
+
+* Clone the repository locally
 
 ```
-    1. Clone the repository using git clone.
-    2. Change into the directory and install dependencies using npm install
-    3. Change into the client directory and run npm start 
-    4. To connect to MongoDB run node app.js
+ git clone https://github.com/AlanGarc1a/GameHub.git
 ```
+
+* Create a ``` .env ``` file and store all the database connection information or any other environment variables that will change.
+* Install dependencies for both client and server using ``` npm install ```
+
+# Technologies
+
+* Mongoose.js - Object Data Mapper for MongoDB
+* Passport.js - User Authentication 
+* React.js - Javascript Library for building User interfaces
+* Axios - http requests
+* Node.js - Back end services API
 
 # Task Lists
 
