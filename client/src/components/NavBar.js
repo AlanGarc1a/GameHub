@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, makeStyles, Button } from '@material-ui/co
 import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
 import { Link, useHistory } from 'react-router-dom';
 import AuthContext from './store/AuthContext';
+import axios from 'axios';
 
 const useStyles = makeStyles({
     small: {
@@ -31,11 +32,16 @@ const NavBar = () => {
 
     const history = useHistory();
 
-    const logoutHandler = () => {
-        setUserData({
-            user: undefined
-        });
-        history.replace('/login');
+    const logoutHandler = async () => {
+
+        const logoutRes = await axios.get('http://localhost:5000/u/logout');
+
+        if(logoutRes.status === 200) {
+            setUserData({
+                user: undefined
+            });
+            history.replace('/login');
+        }
     }
 
     const classes = useStyles();
