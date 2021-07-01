@@ -11,4 +11,7 @@ router.post('/register', userController.register);
 //user login endpoint
 router.post('/login', passport.authenticate('local'), userController.login);
 
+//user logout
+router.get('/logout', userController.logout);
+
 module.exports = router;
