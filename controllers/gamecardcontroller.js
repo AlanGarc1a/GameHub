@@ -16,7 +16,7 @@ module.exports = {
         }
     },
     create: async (req, res) => {
-        const { title, date, image, genre, body } = req.body;
+        const { title, date, image, genre, body, author } = req.body;
     
         try {
             const game = new Game({
@@ -26,6 +26,8 @@ module.exports = {
                 genre: genre,
                 summary: body
             });
+
+            game.author = author
         
             let savedGame = await game.save();
         
@@ -44,7 +46,7 @@ module.exports = {
         const id = req.params.id;
     
         try {
-            let foundGame = await Game.findById(id);
+            let foundGame = await Game.findById(id).populate('author');
     
             if(!foundGame) {
                 res.json('No Game exists');
