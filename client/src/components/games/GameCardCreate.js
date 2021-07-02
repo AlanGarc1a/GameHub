@@ -64,7 +64,7 @@ const GameCardCreate = () => {
     const [image, setImage] = useState('');
     const [date, setDate] = useState(0);
     const [body, setBody] = useState('');
-    const [genre, setGenre] = useState('');
+    const [genre, setGenre] = useState('Adventure');
 
     const [titleError, setTitleError] = useState(false);
     const [dateError, setDateError] = useState(false);
@@ -100,7 +100,7 @@ const GameCardCreate = () => {
         setBody(event.target.value);
     }
 
-    const onSubmitHandler = (event) => {
+    const onSubmitHandler = async (event) => {
         event.preventDefault();
 
         const game = {
@@ -109,6 +109,7 @@ const GameCardCreate = () => {
             image: image,
             genre: genre,
             body: body,
+            author: userData.user._id
         };
 
         if (title === '') {
@@ -127,13 +128,14 @@ const GameCardCreate = () => {
             setGenreError(true);
         }
         else {
-            axios.post("http://localhost:5000/g/create", game)
-                .then(() => {
+            try {
+                const createRes = await axios.post("http://localhost:5000/g/create", game);
+                if(createRes.status === 200) {
                     setRedirect(true);
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+                }
+            } catch(error) {
+                console.log(error);
+            }
         }
     };
 

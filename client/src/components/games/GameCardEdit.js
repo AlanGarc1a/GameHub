@@ -72,6 +72,7 @@ class GameCardEdit extends React.Component {
             image: '',
             genre: '',
             summary: '',
+            author: '',
             open: false
         }
     }
@@ -89,6 +90,7 @@ class GameCardEdit extends React.Component {
                     image: res.data.image,
                     genre: res.data.genre,
                     summary: res.data.summary,
+                    author: res.data.author.username
                 });
             })
             .catch(error => {
@@ -102,7 +104,7 @@ class GameCardEdit extends React.Component {
         });
     }
 
-    onSubmit = (event) => {
+    onSubmit = async (event) => {
         event.preventDefault();
         const { id } = this.props.match.params;
 
@@ -111,30 +113,35 @@ class GameCardEdit extends React.Component {
             date: this.state.date,
             image: this.state.image,
             genre: this.state.genre,
-            summary: this.state.summary
+            summary: this.state.summary,
         };
 
-        axios.put(`http://localhost:5000/g/update/${id}`, game)
-            .then(res => {
-                console.log('Game updated successfully')
+        try {
+            const res = await axios.put(`http://localhost:5000/g/update/${id}`, game);
+            if(res.status === 200) {
                 this.setState({
                     redirect: true
                 });
-            })
-            .catch(error => {
-                console.log(error)
-            });
+            }
+        } catch(error) {
+            console.log('Error updating game: ' ,error);
+        }   
     }
 
-    deleteGame = () => {
+    deleteGame = async () => {
         const { id } = this.props.match.params;
 
-        axios.delete(`http://localhost:5000/g/delete/${id}`)
-            .then(res => {
-                console.log(res);
-                this.setState({ redirect: true, open: false });
-            })
-            .catch(error => { console.log(error) });
+        try {
+            const res = await axios.delete(`http://localhost:5000/g/delete/${id}`);
+            if(res.status === 200) {
+                this.setState({
+                    redirect: true,
+                    open: false
+                });
+            }
+        } catch(error) {
+            console.log('Error deleting game: ', error);
+        } 
     }
 
     handleDialog = () => {
@@ -177,7 +184,7 @@ class GameCardEdit extends React.Component {
     render() {
 
         const { classes } = this.props;
-        const { redirect, title, date, image, genre, summary } = this.state;
+        const { redirect, title, date, image, genre, summary, author } = this.state;
 
         if (redirect) {
             return <Redirect to="/" />
@@ -201,8 +208,8 @@ class GameCardEdit extends React.Component {
                             <Paper variant="elevation" elevation={6} className={classes.paper}>
                                 <Grid item>
                                     <Typography variant="h5" align="center" className={classes.title}>
-                                        New Game
-                                </Typography>
+                                        Update Game: {title}
+                                    </Typography>
                                 </Grid>
                                 <form onSubmit={this.onSubmit}>
                                     <Grid item>
@@ -283,12 +290,20 @@ class GameCardEdit extends React.Component {
                                         />
                                     </Grid>
                                     <Grid item>
-                                        <Button variant="contained" color="primary" type="submit" className={classes.submitButton}>
-                                            Submit
-                                        </Button>
-                                        <Button variant="contained" color="secondary" className={classes.deleteButton} onClick={this.handleDialog}>
-                                            Delete
-                                        </Button>
+                                        { 
+                                           userData.user.username === author ?
+                                            <>
+                                            <Button variant="contained" color="primary" type="submit" className={classes.submitButton}>
+                                                Submit
+                                            </Button>
+                                            <Button variant="contained" color="secondary" className={classes.deleteButton} onClick={this.handleDialog}>
+                                                Delete
+                                            </Button>
+                                            </>
+                                            : <Typography variant="h6">
+                                                You cannot update this game
+                                              </Typography>
+                                        }
                                         <Link to="/">
                                             <Button variant="contained" color="default" className={classes.cancelButton}>
                                                 Cancel

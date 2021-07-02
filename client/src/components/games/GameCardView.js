@@ -26,7 +26,8 @@ class GameCardView extends React.Component {
             date: '',
             image: '',
             genre: '',
-            summary: ''
+            summary: '',
+            author: ''
         }
     }
 
@@ -43,8 +44,8 @@ class GameCardView extends React.Component {
                     genre: res.data.genre,
                     image: res.data.image,
                     summary: res.data.summary,
+                    author: res.data.author
                 });
-                console.log(res);
             })
             .catch(error => {
                 console.log('Error fetching game', error);
@@ -54,7 +55,7 @@ class GameCardView extends React.Component {
     render() {
 
         const { classes } = this.props;
-        const { title, date, genre, summary } = this.state;
+        const { title, date, genre, summary,author } = this.state;
         const { userData } = this.context;
 
         return (
@@ -70,6 +71,9 @@ class GameCardView extends React.Component {
                                     </Typography>
                                     <Typography variant='subtitle2' color='textSecondary' className={classes.wordSpacing}>
                                         {date}
+                                    </Typography>
+                                    <Typography variant='subtitle2' color='textSecondary' className={classes.wordSpacing}>
+                                        Created By: {author.username}
                                     </Typography>
                                     <Typography variant='subtitle2' color='textSecondary' className={classes.wordSpacing}>
                                         Genre: {genre}
