@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { Grid, Button, TextField, makeStyles, Typography, Paper, Container } from "@material-ui/core";
+import { Grid, Button, TextField, makeStyles, Typography, Container } from "@material-ui/core";
 import { Link, Redirect } from "react-router-dom";
 import AuthContext from '../store/AuthContext';
 import axios from "axios";
@@ -40,18 +40,12 @@ const genres = [
 ]
 
 const useStyles = makeStyles((theme) => ({
-    paper: {
-        paddingTop: '100px',
-        paddingBottom: '100px',
-        paddingLeft: '85px',
-        paddingRight: '85px',
-        width: '30%'
-    },
     title: {
         marginBottom: theme.spacing(3)
     },
     textField: {
-        marginBottom: theme.spacing(3)
+        marginBottom: theme.spacing(3),
+        marginRight: theme.spacing(5),
     },
     button: {
         marginRight: theme.spacing(3),
@@ -124,16 +118,16 @@ const GameCardCreate = () => {
         if (body === '') {
             setBodyError(true);
         }
-        if(genre === '') {
+        if (genre === '') {
             setGenreError(true);
         }
         else {
             try {
                 const createRes = await axios.post("http://localhost:5000/g/create", game);
-                if(createRes.status === 200) {
+                if (createRes.status === 200) {
                     setRedirect(true);
                 }
-            } catch(error) {
+            } catch (error) {
                 console.log(error);
             }
         }
@@ -147,7 +141,8 @@ const GameCardCreate = () => {
 
     return (
         <div>
-            { userData.user ?
+            {userData.user ?
+                <>
                 <Container style={{ minHeight: '95vh' }}>
                     <Grid
                         container
@@ -156,103 +151,102 @@ const GameCardCreate = () => {
                         alignItems="center"
                         style={{ minHeight: '95vh' }}
                     >
-                        <Paper variant="elevation" elevation={6} className={classes.paper}>
+
+                        <Grid item>
+                            <Typography variant="h5" align="center" className={classes.title}>
+                                New Game
+                            </Typography>
+                        </Grid>
+                        <form onSubmit={onSubmitHandler}>
                             <Grid item>
-                                <Typography variant="h5" align="center" className={classes.title}>
-                                    New Game
-                                </Typography>
+                                <TextField
+                                    label="Title"
+                                    variant="outlined"
+                                    size="small"
+                                    error={titleError}
+                                    name="title"
+                                    value={title}
+                                    onChange={titleHandler}
+                                    fullWidth
+                                    className={classes.textField}
+                                />
                             </Grid>
-                            <form onSubmit={onSubmitHandler}>
-                                <Grid item>
-                                    <TextField
-                                        label="Title"
-                                        variant="filled"
-                                        size="small"
-                                        error={titleError}
-                                        name="title"
-                                        value={title}
-                                        onChange={titleHandler}
-                                        fullWidth
-                                        className={classes.textField}
-                                    />
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        label="Year"
-                                        variant="filled"
-                                        size="small"
-                                        error={dateError}
-                                        name="date"
-                                        value={date}
-                                        onChange={dateHandler}
-                                        fullWidth
-                                        className={classes.textField}
-                                    />
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        label="Image"
-                                        variant="filled"
-                                        size="small"
-                                        error={imageError}
-                                        name="image"
-                                        value={image}
-                                        onChange={imageHandler}
-                                        fullWidth
-                                        className={classes.textField}
-                                    />
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        id="standard-select-genre-native"
-                                        label='Genre'
-                                        value={genre}
-                                        onChange={genreHandler}
-                                        error={genreError}
-                                        helperText="Please select genre"
-                                        select
-                                        fullWidth
-                                        SelectProps={{
-                                            native: true,
-                                        }}
-                                        className={classes.textField}
-                                    >
-                                        {genres.map( option => (
-                                                <option key={option.key} value={option.value}>
-                                                    {option.label}
-                                                </option>
-                                        ))}
-                                    </TextField>        
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        label="Summary"
-                                        variant="filled"
-                                        size="small"
-                                        error={bodyError}
-                                        multiline
-                                        rows={8}
-                                        name="body"
-                                        value={body}
-                                        onChange={bodyHandler}
-                                        fullWidth
-                                        className={classes.textField}
-                                    />
-                                </Grid>
-                                <Grid item>
-                                    <Button variant="contained" color="primary" type="submit" className={classes.button}>
-                                        Submit
+                            <Grid item>
+                                <TextField
+                                    label="Year"
+                                    variant="outlined"
+                                    size="small"
+                                    error={dateError}
+                                    name="date"
+                                    value={date}
+                                    onChange={dateHandler}
+                                    fullWidth
+                                    className={classes.textField}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    label="Image"
+                                    variant="outlined"
+                                    size="small"
+                                    error={imageError}
+                                    name="image"
+                                    value={image}
+                                    onChange={imageHandler}
+                                    fullWidth
+                                    className={classes.textField}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    id="standard-select-genre-native"
+                                    label='Genre'
+                                    value={genre}
+                                    onChange={genreHandler}
+                                    error={genreError}
+                                    helperText="Please select genre"
+                                    select
+                                    fullWidth
+                                    SelectProps={{
+                                        native: true,
+                                    }}
+                                    className={classes.textField}
+                                >
+                                    {genres.map(option => (
+                                        <option key={option.key} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                    ))}
+                                </TextField>
+                            </Grid>
+                            <Grid item>
+                                <TextField
+                                    label="Summary"
+                                    variant="outlined"
+                                    size="small"
+                                    error={bodyError}
+                                    multiline
+                                    rows={8}
+                                    name="body"
+                                    value={body}
+                                    onChange={bodyHandler}
+                                    fullWidth
+                                    className={classes.textField}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <Button variant="contained" color="primary" type="submit" className={classes.button}>
+                                    Submit
+                                </Button>
+                                <Link to="/">
+                                    <Button variant="contained" color="default" className={classes.button}>
+                                        Cancel
                                     </Button>
-                                    <Link to="/">
-                                        <Button variant="contained" color="default">
-                                            Cancel
-                                        </Button>
-                                    </Link>
-                                </Grid>
-                            </form>
-                        </Paper>
+                                </Link>
+                            </Grid>
+                        </form>
                     </Grid>
-                </Container> :
+                </Container></> :
                 <Grid container justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
                     <Typography variant="h4">
                         You must be logged in to create a Game.

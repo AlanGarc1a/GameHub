@@ -1,29 +1,19 @@
 import React from 'react';
-import { Grid, Paper, TextField, Typography, withStyles, Button, Dialog, DialogTitle, DialogContent, DialogActions, Container } from '@material-ui/core';
+import { Grid, TextField, Typography, withStyles, Button, Dialog, DialogTitle, DialogContent, DialogActions, Container } from '@material-ui/core';
 import { Link, Redirect } from 'react-router-dom';
 import axios from 'axios';
 import AuthContext from '../store/AuthContext';
 
 const styles = theme => ({
+    title: {
+        marginBottom: theme.spacing(3)
+    },
     textField: {
         marginBottom: theme.spacing(3)
     },
-    submitButton: {
-        margin: '10px 0px 50px 50px',
-    },
-    cancelButton: {
-        margin: '10px 0px 50px 25px',
-    },
-    deleteButton: {
-        margin: '10px 0px 50px 25px',
-    },
-    paper: {
-        paddingTop: '100px',
-        paddingBottom: '100px',
-        paddingLeft: '85px',
-        paddingRight: '85px',
-        width: '30%'
-    },
+    button: {
+        marginRight: theme.spacing(3),
+    }
 });
 
 const genres = [
@@ -205,7 +195,6 @@ class GameCardEdit extends React.Component {
                             alignItems="center"
                             style={{ minHeight: '95vh' }}
                         >
-                            <Paper variant="elevation" elevation={6} className={classes.paper}>
                                 <Grid item>
                                     <Typography variant="h5" align="center" className={classes.title}>
                                         Update Game: {title}
@@ -215,7 +204,7 @@ class GameCardEdit extends React.Component {
                                     <Grid item>
                                         <TextField
                                             label="Title"
-                                            variant="filled"
+                                            variant="outlined"
                                             size="small"
                                             error={this.state.titleError}
                                             name="title"
@@ -228,7 +217,7 @@ class GameCardEdit extends React.Component {
                                     <Grid item>
                                         <TextField
                                             label="Year"
-                                            variant="filled"
+                                            variant="outlined"
                                             size="small"
                                             error={this.state.dateError}
                                             name="date"
@@ -241,7 +230,7 @@ class GameCardEdit extends React.Component {
                                     <Grid item>
                                         <TextField
                                             label="Image"
-                                            variant="filled"
+                                            variant="outlined"
                                             size="small"
                                             error={this.state.imageError}
                                             name="image"
@@ -277,7 +266,7 @@ class GameCardEdit extends React.Component {
                                     <Grid item>
                                         <TextField
                                             label="Summary"
-                                            variant="filled"
+                                            variant="outlined"
                                             size="small"
                                             error={this.state.bodyError}
                                             multiline
@@ -293,10 +282,10 @@ class GameCardEdit extends React.Component {
                                         { 
                                            userData.user.username === author ?
                                             <>
-                                            <Button variant="contained" color="primary" type="submit" className={classes.submitButton}>
+                                            <Button variant="contained" color="primary" type="submit" className={classes.button}>
                                                 Submit
                                             </Button>
-                                            <Button variant="contained" color="secondary" className={classes.deleteButton} onClick={this.handleDialog}>
+                                            <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleDialog}>
                                                 Delete
                                             </Button>
                                             </>
@@ -305,13 +294,12 @@ class GameCardEdit extends React.Component {
                                               </Typography>
                                         }
                                         <Link to="/">
-                                            <Button variant="contained" color="default" className={classes.cancelButton}>
+                                            <Button variant="contained" color="default" className={classes.button}>
                                                 Cancel
                                             </Button>
                                         </Link>
                                     </Grid>
                                 </form>
-                            </Paper>
                         </Grid>
                     </Container> </> :
                     <Grid container justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
