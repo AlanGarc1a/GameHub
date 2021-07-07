@@ -62,9 +62,9 @@ const NavBar = () => {
                         </Link>
                     )}
                     {userData.user && (
-                        <Link to="/profile" className={classes.link}>
-                            <p>{userData.user.username}</p>
-                        </Link>
+                        <Typography className={classes.link}>
+                            {userData.user.username}
+                        </Typography>
                     )}
                     {userData.user && (
                         <Button variant="contained" color="default" onClick={logoutHandler}>
