@@ -1,17 +1,11 @@
 import React from 'react';
-import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, withStyles, Typography } from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, CardHeader, withStyles, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 const styles = theme => ({
     root: {
-        maxWidth: 365,
+        maxWidth: 350,
         height: '100%'
-    },
-    media: {
-        height: '350px',
-        paddingTop: '1%',
-        width: '100%',
-        objectFit: 'fill'
     },
     title: {
         marginBottom: 15
@@ -28,7 +22,7 @@ class GameCard extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const { id, title, date, image, summary } = this.props;
+        const { id, title, date, summary } = this.props;
 
         return (
             <div>
@@ -36,13 +30,6 @@ class GameCard extends React.Component {
                     <CardHeader
                         title={title}
                         subheader={date}
-                    />
-                    <CardMedia
-                        className={classes.media}
-                        title={title}
-                        alt={title}
-                        component="img"
-                        image={image}
                     />
                     <CardContent>
                         <div className={classes.body}>

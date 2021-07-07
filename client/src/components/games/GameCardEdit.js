@@ -59,7 +59,6 @@ class GameCardEdit extends React.Component {
         this.state = {
             title: '',
             date: '',
-            image: '',
             genre: '',
             summary: '',
             author: '',
@@ -77,7 +76,6 @@ class GameCardEdit extends React.Component {
                 this.setState({
                     title: res.data.title,
                     date: res.data.date,
-                    image: res.data.image,
                     genre: res.data.genre,
                     summary: res.data.summary,
                     author: res.data.author.username
@@ -101,7 +99,6 @@ class GameCardEdit extends React.Component {
         const game = {
             title: this.state.title,
             date: this.state.date,
-            image: this.state.image,
             genre: this.state.genre,
             summary: this.state.summary,
         };
@@ -174,7 +171,7 @@ class GameCardEdit extends React.Component {
     render() {
 
         const { classes } = this.props;
-        const { redirect, title, date, image, genre, summary, author } = this.state;
+        const { redirect, title, date, genre, summary, author } = this.state;
 
         if (redirect) {
             return <Redirect to="/" />
@@ -222,19 +219,6 @@ class GameCardEdit extends React.Component {
                                             error={this.state.dateError}
                                             name="date"
                                             value={date}
-                                            onChange={this.handleChange}
-                                            fullWidth
-                                            className={classes.textField}
-                                        />
-                                    </Grid>
-                                    <Grid item>
-                                        <TextField
-                                            label="Image"
-                                            variant="outlined"
-                                            size="small"
-                                            error={this.state.imageError}
-                                            name="image"
-                                            value={image}
                                             onChange={this.handleChange}
                                             fullWidth
                                             className={classes.textField}

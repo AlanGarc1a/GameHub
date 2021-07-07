@@ -55,14 +55,12 @@ const useStyles = makeStyles((theme) => ({
 const GameCardCreate = () => {
 
     const [title, setTitle] = useState('');
-    const [image, setImage] = useState('');
     const [date, setDate] = useState(0);
     const [body, setBody] = useState('');
     const [genre, setGenre] = useState('Adventure');
 
     const [titleError, setTitleError] = useState(false);
     const [dateError, setDateError] = useState(false);
-    const [imageError, setImageError] = useState(false);
     const [bodyError, setBodyError] = useState(false);
     const [genreError, setGenreError] = useState(false);
     const [redirect, setRedirect] = useState(false);
@@ -73,11 +71,6 @@ const GameCardCreate = () => {
         event.persist();
         setTitle(event.target.value);
     };
-
-    const imageHandler = (event) => {
-        event.persist();
-        setImage(event.target.value);
-    }
 
     const dateHandler = (event) => {
         event.persist();
@@ -100,7 +93,6 @@ const GameCardCreate = () => {
         const game = {
             title: title,
             date: date,
-            image: image,
             genre: genre,
             body: body,
             author: userData.user._id
@@ -111,9 +103,6 @@ const GameCardCreate = () => {
         }
         if (date === '') {
             setDateError(true);
-        }
-        if (image === '') {
-            setImageError(true);
         }
         if (body === '') {
             setBodyError(true);
@@ -180,19 +169,6 @@ const GameCardCreate = () => {
                                     name="date"
                                     value={date}
                                     onChange={dateHandler}
-                                    fullWidth
-                                    className={classes.textField}
-                                />
-                            </Grid>
-                            <Grid item>
-                                <TextField
-                                    label="Image"
-                                    variant="outlined"
-                                    size="small"
-                                    error={imageError}
-                                    name="image"
-                                    value={image}
-                                    onChange={imageHandler}
                                     fullWidth
                                     className={classes.textField}
                                 />
