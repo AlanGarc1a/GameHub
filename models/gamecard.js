@@ -1,17 +1,13 @@
 const mongoose = require('mongoose');
 const Schema  = mongoose.Schema;
 
-const gameCardSchema = new Schema({
+const GameCardSchema = new Schema({
     title: { 
         type: String, 
         required: true
     },
     date: { 
         type: Number, 
-        required: true
-    },
-    image: { 
-        type: String,
         required: true
     },
     genre: {
@@ -29,6 +25,6 @@ const gameCardSchema = new Schema({
     }
 });
 
-const Game = mongoose.model('GameCard', gameCardSchema);
+const Game = mongoose.model('GameCard', GameCardSchema);
 
 module.exports = Game;
