@@ -16,13 +16,12 @@ module.exports = {
         }
     },
     create: async (req, res) => {
-        const { title, date, image, genre, body, author } = req.body;
-    
+        const { title, date, genre, body, author } = req.body;
+        
         try {
             const game = new Game({
                 title: title,
                 date: date,
-                image: image,
                 genre: genre,
                 summary: body
             });
@@ -37,6 +36,7 @@ module.exports = {
             res.json('Game added');
     
         } catch(error) {
+            console.log(error);
             res.status(400).json('Error:' + error);
         }
     
