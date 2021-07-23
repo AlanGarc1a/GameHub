@@ -6,13 +6,13 @@ module.exports = {
             let games = await Game.find({});
 
             if(!games){
-                res.json({ msg: 'No games found' });
+                res.status(204).json('No games found');
             }
 
-            res.json(games);
+            res.status(200).json(games);
             
         } catch(error) {
-            res.json({ erro: error});
+            res.status(400).json(error);
         }
     },
     create: async (req, res) => {
@@ -31,9 +31,9 @@ module.exports = {
             let savedGame = await game.save();
         
             if(!savedGame) {
-                res.status(400).json('Error:' + error);
+                res.status(400).json('Error creating game');
             }
-            res.json('Game added');
+            res.status(201).json('Game added');
     
         } catch(error) {
             console.log(error);
@@ -49,10 +49,10 @@ module.exports = {
             let foundGame = await Game.findById(id).populate('author');
     
             if(!foundGame) {
-                res.json('No Game exists');
+                res.status(204).json('No Game found');
             }
             
-            res.json(foundGame);
+            res.status(200).json(foundGame);
     
         } catch(error) {
             res.status(400).json('Error: ' + error);
@@ -66,10 +66,10 @@ module.exports = {
             let updateGame = await Game.findByIdAndUpdate(id, { $set: req.body });
     
             if(!updateGame) {
-                res.json({ msg: 'Could not update Game'})
+                res.status(400).json('Failed to update game');
             }
     
-            res.json(updateGame);
+            res.status(200).json(updateGame);
     
         } catch(error) {
             res.status(400).json('Error:' + error);
@@ -82,9 +82,9 @@ module.exports = {
             let removedGame = await Game.findByIdAndRemove(id);
     
             if(!removedGame) {
-                res.json({ msg: 'Could not delete Game'})
+                res.status(400).json('Could not delete game');
             }
-            res.json({msg: 'Game deleted'})
+            res.status(200).json('Game was deleted');
         } catch(error) {
             res.status(400).json('Error:' + error);
         }
