@@ -4,7 +4,7 @@
   "description": "A CRUD based application for games",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha 'test/apiTest.js'"
   },
   "repository": {
     "type": "git",
@@ -21,9 +21,11 @@
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
+    "mocha": "^9.0.2",
     "mongoose": "^5.11.19",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^6.1.0"
+    "passport-local-mongoose": "^6.1.0",
+    "supertest": "^6.1.4"
   }
 }
