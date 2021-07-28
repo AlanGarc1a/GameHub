@@ -22,7 +22,7 @@ class GameList extends React.Component {
     }
 
     componentDidMount = () => {
-        axios.get('http://localhost:5000/g/')
+        axios.get('http://localhost:5000/api/games/')
             .then(res => {
                 if(res.data.length > 0){
                     this.setState({ 

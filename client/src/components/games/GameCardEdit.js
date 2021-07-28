@@ -71,7 +71,7 @@ class GameCardEdit extends React.Component {
     componentDidMount = () => {
         const { id } = this.props.match.params;
 
-        axios.get(`http://localhost:5000/g/${id}`)
+        axios.get(`http://localhost:5000/api/games/${id}`)
             .then(res => {
                 this.setState({
                     title: res.data.title,
@@ -104,7 +104,7 @@ class GameCardEdit extends React.Component {
         };
 
         try {
-            const res = await axios.put(`http://localhost:5000/g/update/${id}`, game);
+            const res = await axios.put(`http://localhost:5000/api/games/update/${id}`, game);
             if(res.status === 200) {
                 this.setState({
                     redirect: true
@@ -119,7 +119,7 @@ class GameCardEdit extends React.Component {
         const { id } = this.props.match.params;
 
         try {
-            const res = await axios.delete(`http://localhost:5000/g/delete/${id}`);
+            const res = await axios.delete(`http://localhost:5000/api/games/delete/${id}`);
             if(res.status === 200) {
                 this.setState({
                     redirect: true,

@@ -36,7 +36,7 @@ class GameCardView extends React.Component {
     componentDidMount() {
         const { id } = this.props.match.params;
 
-        axios.get(`http://localhost:5000/g/${id}`)
+        axios.get(`http://localhost:5000/api/games/${id}`)
             .then(res => {
                 this.setState({
                     title: res.data.title,
