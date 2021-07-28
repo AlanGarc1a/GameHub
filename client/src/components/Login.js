@@ -64,7 +64,7 @@ const Login = () => {
                 setPasswordError(true);
             }
             else {
-                const loginResponse = await axios.post('http://localhost:5000/u/login', existingUser);
+                const loginResponse = await axios.post('http://localhost:5000/api/users/login', existingUser);
     
                 setUserData({
                     user: loginResponse.data

@@ -34,7 +34,7 @@ const NavBar = () => {
 
     const logoutHandler = async () => {
 
-        const logoutRes = await axios.get('http://localhost:5000/u/logout');
+        const logoutRes = await axios.get('http://localhost:5000/api/users/logout');
 
         if(logoutRes.status === 200) {
             setUserData({
