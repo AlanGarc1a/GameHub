@@ -8,6 +8,10 @@ I have been using HTML5, CSS3, and JavaScript to build user interfaces for web a
 and so I decided to learn different technologies to use in order to build one. I decided to learn the MERN stack and built
 this CRUD application where users can upload their favorite games.
 
+# API
+
+![image](https://user-images.githubusercontent.com/32556354/129487856-c49c5ef7-27cc-4a35-8bb9-c5d6ef9cf4c7.png)
+
 # Project Structure
 
 ```
@@ -43,7 +47,7 @@ this CRUD application where users can upload their favorite games.
  ┣ 📜gamecard.js                // schema for gamecard collection
  ┗ 📜user.js                    // schema for user collection
 
- 📦routes                       // fodler containing all routes
+ 📦routes                       // folder containing all routes
  ┣ 📜gameRoute.js               // routes for gamecard
  ┗ 📜userRoutes.js              // routes for user
 
