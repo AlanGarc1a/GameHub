@@ -19,24 +19,29 @@ module.exports = {
         const { title, date, genre, body, author } = req.body;
         
         try {
-            const game = new Game({
-                title: title,
-                date: date,
-                genre: genre,
-                summary: body
-            });
+            const findGame = await Game.findOne({ title, date, genre });
 
-            game.author = author
-        
-            let savedGame = await game.save();
-        
-            if(!savedGame) {
-                res.status(400).json('Error creating game');
-            }
-            res.status(201).json('Game added');
+            if(findGame) {
+                res.status(400).json({ message: "Game already exists" });
+            } 
+            else {
+                const game = new Game({
+                    title: title,
+                    date: date,
+                    genre: genre,
+                    summary: body
+                });
     
+                game.author = author
+            
+                let savedGame = await game.save();
+            
+                if(!savedGame) {
+                    res.status(400).json('Error creating game');
+                }
+                res.status(200).json({ message: 'Game Created' });
+            }
         } catch(error) {
-            console.log(error);
             res.status(400).json('Error:' + error);
         }
     
@@ -49,7 +54,7 @@ module.exports = {
             let foundGame = await Game.findById(id).populate('author');
     
             if(!foundGame) {
-                res.status(204).json('No Game found');
+                res.status(400).json({ message: 'No Game Found'});
             }
             
             res.status(200).json(foundGame);
@@ -72,7 +77,7 @@ module.exports = {
             res.status(200).json(updateGame);
     
         } catch(error) {
-            res.status(400).json('Error:' + error);
+            res.status(400).json({ message: "Failed to update game" });
         }
     },
     delete: async (req, res) => {
