@@ -64,6 +64,7 @@ const GameCardCreate = () => {
     const [bodyError, setBodyError] = useState(false);
     const [genreError, setGenreError] = useState(false);
     const [redirect, setRedirect] = useState(false);
+    const [gameError, setGameError] = useState(false);
 
     const { userData } = useContext(AuthContext);
 
@@ -101,13 +102,13 @@ const GameCardCreate = () => {
         if (title === '') {
             setTitleError(true);
         }
-        if (date === '') {
+        else if (date === '') {
             setDateError(true);
         }
-        if (body === '') {
+        else if (body === '') {
             setBodyError(true);
         }
-        if (genre === '') {
+        else if (genre === '') {
             setGenreError(true);
         }
         else {
@@ -117,7 +118,7 @@ const GameCardCreate = () => {
                     setRedirect(true);
                 }
             } catch (error) {
-                console.log(error);
+                setGameError(true);
             }
         }
     };
@@ -146,6 +147,7 @@ const GameCardCreate = () => {
                                 New Game
                             </Typography>
                         </Grid>
+                        { gameError && <Typography style={{color: 'red', marginBottom: '10px'}}>Game Already exists</Typography>}
                         <form onSubmit={onSubmitHandler}>
                             <Grid item>
                                 <TextField
