@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+}
+
 const express        = require('express');
 const mongoose       = require('mongoose');
 const cors           = require('cors');
@@ -6,8 +10,6 @@ const localStrategy  = require('passport-local').Strategy;
 const session        = require('express-session');
 
 const User = require('./models/user');
-
-require('dotenv').config();
 
 const app  = express();
 const port = process.env.PORT;
@@ -65,11 +67,15 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //game routes
-app.use('/g', gameRoutes);
+app.use('/api/games', gameRoutes);
 
 //user routes
-app.use('/u', userRoutes);
+app.use('/api/users', userRoutes);
+
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is listening on ${port}`);
 });
+
+
+module.exports = app;
