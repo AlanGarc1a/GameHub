@@ -33,6 +33,7 @@ const UserForm = () => {
     const [nameError, setNameError] = useState(false);
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
+    const [registerError, setRegisterError] = useState(false);
 
     const history = useHistory();
 
@@ -53,10 +54,10 @@ const UserForm = () => {
             if (nameInput === '') {
                 setNameError(true);
             }
-            if (emailInput === '') {
+            else if (emailInput === '') {
                 setEmailError(true);
             }
-            if (passwordInput === '') {
+            else if (passwordInput === '') {
                 setPasswordError(true);
             }
             else {
@@ -69,7 +70,7 @@ const UserForm = () => {
                 history.replace('/');
             }
         } catch(error) {
-            console.log(error);
+            setRegisterError(true);
         }
     }
 
@@ -103,6 +104,7 @@ const UserForm = () => {
                             <Typography variant="h5" align="center">
                                 Register
                             </Typography>
+                            { registerError && <Typography style={{color: 'red', marginBottom: '10px' }}>Username/email taken already</Typography>}
                         </Grid>
                         <form onSubmit={submitHandler}>
                             <Grid item>
