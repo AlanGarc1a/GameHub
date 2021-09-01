@@ -4,8 +4,14 @@ module.exports = {
     register: async (req, res, next) => {
         try {
             const { username, email, password } = req.body;
+
+            const foundUser = User.findOne({ username });
+
+            if(foundUser) {
+                res.status(400).json({message: "A user with that username already exists "});
+            }
     
-            const user = new User( { username, email: email} );
+            const user = new User( { username, email } );
 
             const registerUser = await User.register(user, password);
     
