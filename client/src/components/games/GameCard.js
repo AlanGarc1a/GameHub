@@ -15,6 +15,9 @@ const styles = theme => ({
     },
     body: {
         height: '100px'
+    },
+    cardContent: {
+        marginBottom: '20px'
     }
 });
 
@@ -31,7 +34,7 @@ class GameCard extends React.Component {
                         title={title}
                         subheader={date}
                     />
-                    <CardContent>
+                    <CardContent className={classes.cardContent}>
                         <div className={classes.body}>
                             <Typography component="p" className={classes.content}>
                                 {summary}
