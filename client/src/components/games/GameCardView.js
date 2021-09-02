@@ -1,19 +1,23 @@
 import React from 'react';
-import { Card, CardActions, Grid, Typography, Button, withStyles, CardContent } from '@material-ui/core';
+import { Card, Grid, Typography, Button, withStyles, CardContent, CardHeader } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import AuthContext from '../store/AuthContext';
 import axios from 'axios';
 
 const styles = theme => ({
     card: {
-        width: '500px',
-        height: '325px',
-        paddingLeft: theme.spacing(5),
-        paddingRight: theme.spacing(5),
-        paddingTop: theme.spacing(5),
+        width: 450,
+        height: '100%',
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+        paddingTop: theme.spacing(2),
     },
     wordSpacing: {
-        marginBottom: '5px'
+        marginBottom: theme.spacing(2)
+    },
+    button: {
+        marginLeft: theme.spacing(2),
+        marginBottom: theme.spacing(2)
     }
 });
 
@@ -62,33 +66,31 @@ class GameCardView extends React.Component {
             <div>
                 { userData.user ?
 
-                    <Grid container direction="row" justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
+                    <Grid container justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
                         <Grid item>
                             <Card className={classes.card}>
+                                <CardHeader 
+                                    title={title}
+                                    subheader={date}
+                                />
                                 <CardContent>
-                                    <Typography variant='subtitle1' className={classes.wordSpacing}>
-                                        {title}
-                                    </Typography>
-                                    <Typography variant='subtitle2' color='textSecondary' className={classes.wordSpacing}>
-                                        {date}
-                                    </Typography>
-                                    <Typography variant='subtitle2' color='textSecondary' className={classes.wordSpacing}>
-                                        Created By: {author.username}
-                                    </Typography>
-                                    <Typography variant='subtitle2' color='textSecondary' className={classes.wordSpacing}>
-                                        Genre: {genre}
-                                    </Typography>
-                                    <Typography paragraph>
-                                        {summary}
-                                    </Typography>
+                                    <div>
+                                        <Typography variant='subtitle2' color='textSecondary' paragraph>
+                                            Created By: {author.username}
+                                        </Typography>
+                                        <Typography variant='subtitle2' color='textSecondary' className={classes.wordSpacing} paragraph>
+                                            Genre: {genre}
+                                        </Typography>
+                                        <Typography paragraph>
+                                            {summary}
+                                        </Typography>
+                                    </div>
                                 </CardContent>
-                                <CardActions>
-                                    <Link to="/">
-                                        <Button variant="contained" size="small" color="primary">
-                                            Go Back
-                                        </Button>
-                                    </Link>
-                                </CardActions>
+                                <Link to="/">
+                                    <Button variant="contained" size="small" color="primary" className={classes.button}>
+                                        Go Back
+                                    </Button>
+                                </Link>
                             </Card>
                         </Grid>
                     </Grid> :
