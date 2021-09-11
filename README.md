@@ -4,13 +4,20 @@ GameHub is a single page web application where users can create, update, view, a
 
 # Motivation
 
-I have been using HTML5, CSS3, and JavaScript to build user interfaces for web applications. I wanted to learn the Full Stack of Web applications
-and so I decided to learn different technologies to use in order to build one. I decided to learn the MERN stack and built
-this CRUD application where users can upload their favorite games.
+To build a full stack application using the MERN stack.
 
 # API
 
 ![image](https://user-images.githubusercontent.com/32556354/129487856-c49c5ef7-27cc-4a35-8bb9-c5d6ef9cf4c7.png)
+
+# Technologies
+
+* Mongoose.js - Object Data Mapper for MongoDB
+* Passport.js - User Authentication 
+* React.js - Javascript Library for building User interfaces
+* Axios - http requests
+* Node.js - Back end services API
+* Express.js - building web servers
 
 # Project Structure
 
@@ -67,23 +74,3 @@ To run the application you will need to:
 
 * Create a ``` .env ``` file and store all the database connection information or any other environment variables that will change.
 * Install dependencies for both client and server using ``` npm install ```
-
-# Technologies
-
-* Mongoose.js - Object Data Mapper for MongoDB
-* Passport.js - User Authentication 
-* React.js - Javascript Library for building User interfaces
-* Axios - http requests
-* Node.js - Back end services API
-
-# Task Lists
-
-- [x] Create the navigation
-- [x] Create the game card
-- [x] Render a list of cards
-- [x] Add the create new card
-- [x] Create the server
-- [x] Create game card model
-- [x] Create the edit route
-- [x] Create user model
-- [x] Create registration route
