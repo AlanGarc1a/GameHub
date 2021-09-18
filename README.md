@@ -4,20 +4,35 @@ GameHub is a single page web application where users can create, update, view, a
 
 # Motivation
 
-To build a full stack application using the MERN stack.
-
-# API
-
-![image](https://user-images.githubusercontent.com/32556354/129487856-c49c5ef7-27cc-4a35-8bb9-c5d6ef9cf4c7.png)
+To build a web application application using the MERN stack.
 
 # Technologies
 
-* Mongoose.js - Object Data Mapper for MongoDB
-* Passport.js - User Authentication 
-* React.js - Javascript Library for building User interfaces
-* Axios - http requests
-* Node.js - Back end services API
-* Express.js - building web servers
+* Front end
+ * React.js
+ * Material UI
+ * Axios
+
+* Back end
+ * Mongoose.js
+ * Passport.js 
+ * Passport-local-mongoose.js
+ * Node.js
+ * Express.js
+ * Express-Session.js
+
+# Installation
+
+To run the application you will need to:
+
+* Clone the repository locally
+
+```
+ git clone https://github.com/AlanGarc1a/GameHub.git
+```
+
+* Create a ``` .env ``` file and store all the database connection information or any other environment variables that will change.
+* Install dependencies for both client and server using ``` npm install ```
 
 # Project Structure
 
@@ -61,16 +76,3 @@ To build a full stack application using the MERN stack.
  app.js                         // the entry point for running the backend server
 
 ```
-
-# Installation
-
-To run the application you will need to:
-
-* Clone the repository locally
-
-```
- git clone https://github.com/AlanGarc1a/GameHub.git
-```
-
-* Create a ``` .env ``` file and store all the database connection information or any other environment variables that will change.
-* Install dependencies for both client and server using ``` npm install ```
