@@ -28,6 +28,7 @@ const Login = () => {
 
     const [usernameInput, setUsername] = useState('');
     const [passwordInput, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const [userNameError, setUsernameError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
@@ -74,7 +75,9 @@ const Login = () => {
                 history.replace("/");
             }
         } catch(error) {
+            error.response.data = 'Invalid username or password';
             setLoginError(true);
+            setErrorMessage(error.response.data);
         }
 
     }
@@ -94,7 +97,7 @@ const Login = () => {
                             <Typography variant="h5" align='center'>
                                 Login
                             </Typography>
-                            {loginError && <Typography style={{color: 'red', marginBottom: '10px'}}>Username does not exist</Typography>}
+                            {loginError && <Typography style={{color: 'red', marginBottom: '10px'}}>{errorMessage}</Typography>}
                         </Grid>
                         <form onSubmit={submitHandler}>
                             <Grid item>
