@@ -1,20 +1,9 @@
-import React from 'react';
-import { Grid, TextField, Typography, withStyles, Button, Dialog, DialogTitle, DialogContent, DialogActions, Container } from '@material-ui/core';
-import { Link, Redirect } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { Grid, TextField, Typography, makeStyles, Button, Dialog, DialogTitle, DialogContent, DialogActions, Container } from '@material-ui/core';
+import { Link, Redirect, useParams } from 'react-router-dom';
+import Header from '../Header';
 import axios from 'axios';
 import AuthContext from '../store/AuthContext';
-
-const styles = theme => ({
-    title: {
-        marginBottom: theme.spacing(3)
-    },
-    textField: {
-        marginBottom: theme.spacing(3)
-    },
-    button: {
-        marginRight: theme.spacing(3),
-    }
-});
 
 const genres = [
     {
@@ -51,116 +40,157 @@ const genres = [
     },
 ]
 
-class GameCardEdit extends React.Component {
+const useStyles = makeStyles((theme) => ({
+    title: {
+        marginBottom: theme.spacing(3)
+    },
+    textField: {
+        marginBottom: theme.spacing(3)
+    },
+    button: {
+        marginRight: theme.spacing(3)
+    }
+}));
 
-    constructor(props) {
-        super(props);
+const GameCardEdit = () => {
 
-        this.state = {
-            title: '',
-            date: '',
-            genre: '',
-            summary: '',
-            author: '',
-            open: false
-        }
+    const [title, setTitle] = useState('');
+    const [date, setDate] = useState('');
+    const [genre, setGenre] = useState('');
+    const [summary, setSummary] = useState('');
+    const [author, setAuthor] = useState('');
+
+    const [titleError, setTitleError] = useState(false);
+    const [dateError, setDateError] = useState(false);
+    const [genreError, setGenreError] = useState(false);
+    const [summaryError, setSummaryError] = useState(false);
+
+    const [open, setOpen] = useState(false);
+    const [redirect, setRedirect] = useState(false);
+
+    const { id }  = useParams();
+
+    const { userData } = useContext(AuthContext);
+
+    const onTitleHandler = (event) => {
+        event.persist();
+        setTitle(event.target.value);
     }
 
-    static contextType = AuthContext;
+    const onDateHandler = (event) => {
+        event.persist();
+        setDate(event.target.value);
+    }
 
-    componentDidMount = () => {
-        const { id } = this.props.match.params;
+    const onGenreHandler = (event) => {
+        event.persist();
+        setGenre(event.target.value);
+    }
 
-        axios.get(`http://localhost:5000/api/games/${id}`)
-            .then(res => {
-                this.setState({
-                    title: res.data.title,
-                    date: res.data.date,
-                    genre: res.data.genre,
-                    summary: res.data.summary,
-                    author: res.data.author.username
-                });
-            })
-            .catch(error => {
+    const onSummaryHandler = (event) => {
+        event.persist();
+        setSummary(event.target.value);
+    }
+    
+    useEffect(() => {
+        const fetchGame = async () => {
+            try {
+                const res = await axios.get(`http://localhost:5000/api/games/${id}`);
+                if(res.status === 200) {
+                    setTitle(res.data.title);
+                    setDate(res.data.date);
+                    setGenre(res.data.genre);
+                    setSummary(res.data.summary);
+                    setAuthor(res.data.author.username);
+                }
+    
+            } catch(error) {
                 console.log(error);
-            })
-    }
+            }
+        }
 
-    handleChange = (event) => {
-        this.setState({
-            [event.target.name]: event.target.value
-        });
-    }
+        fetchGame();
 
-    onSubmit = async (event) => {
+        return () => { setTitle(''); setDate(''); setGenre(''); setSummary(''); setAuthor('');  }
+    }, [id]);
+
+    const onSubmit = async (event) => {
         event.preventDefault();
-        const { id } = this.props.match.params;
 
         const game = {
-            title: this.state.title,
-            date: this.state.date,
-            genre: this.state.genre,
-            summary: this.state.summary,
+            title: title,
+            date: date,
+            genre: genre,
+            summary: summary,
         };
 
-        try {
-            const res = await axios.put(`http://localhost:5000/api/games/update/${id}`, game);
-            if(res.status === 200) {
-                this.setState({
-                    redirect: true
-                });
-            }
-        } catch(error) {
-            console.log('Error updating game: ' ,error);
-        }   
+        if(title === '') {
+            setTitleError(true);
+        }
+        else if(date === '') {
+            setDateError(true);
+        }
+        else if(genre === '') {
+            setGenreError(true);
+        }
+        else if(summary === '') {
+            setSummaryError(true);
+        }
+        else {
+            try {
+                const res = await axios.put(`http://localhost:5000/api/games/update/${id}`, game);
+                if(res.status === 200) {
+                    setRedirect(true);
+                }
+            } catch(error) {
+                console.log('Error updating game: ', error);
+            }   
+        }
+
     }
 
-    deleteGame = async () => {
-        const { id } = this.props.match.params;
-
+    const deleteGame = async () => {
         try {
             const res = await axios.delete(`http://localhost:5000/api/games/delete/${id}`);
             if(res.status === 200) {
-                this.setState({
-                    redirect: true,
-                    open: false
-                });
+                setRedirect(true);
+                setOpen(false);
             }
         } catch(error) {
             console.log('Error deleting game: ', error);
         } 
     }
 
-    handleDialog = () => {
-        this.setState({ open: true });
+    const handleDialog = () => {
+        setOpen(true);
     }
 
-    closeDialog = () => {
-        this.setState({ open: false });
+    const closeDialog = () => {
+        setOpen(false);
     }
 
-    ShowDialog = () => {
+    const ShowDialog = () => {
         return (
-            <Dialog onClose={this.closeDialog} open={this.state.open}>
-                <DialogTitle onClose={this.closeDialog}>
+            <Dialog onClose={closeDialog} open={open}>
+                <DialogTitle onClose={closeDialog}>
                     Are you sure you want to delete this game?
                 </DialogTitle>
                 <DialogContent dividers>
                     <Typography gutterBottom>
-                        {this.state.title}
+                        {title}
                     </Typography>
                     <Typography gutterBottom>
-                        Genre: {this.state.genre}
+                        Genre: {genre}
                     </Typography>
                     <Typography gutterBottom>
-                        {this.state.summary}
+                        {summary}
                     </Typography>
                 </DialogContent>
                 <DialogActions>
-                    <Button color="secondary" type="submit" onClick={this.deleteGame}>
+                    <Button color="secondary" type="submit" onClick={deleteGame}>
                         Delete Game
                     </Button>
-                    <Button color="default" type="submit" onClick={this.closeDialog}>
+                    <Button color="default" type="submit" onClick={closeDialog}>
                         Cancel
                     </Button>
                 </DialogActions>
@@ -168,133 +198,122 @@ class GameCardEdit extends React.Component {
         );
     }
 
-    render() {
+    const classes = useStyles();
 
-        const { classes } = this.props;
-        const { redirect, title, date, genre, summary, author } = this.state;
+    if (redirect) {
+        return <Redirect to="/" />
+    }
 
-        if (redirect) {
-            return <Redirect to="/" />
-        }
-
-        const { userData } = this.context;
-
-        return (
-            <div>
-                { userData.user ?
-                    <>
-                    {this.ShowDialog()}
-                    <Container style={{ minHeight: '95vh' }}>
-                        <Grid
-                            container
-                            direction="column"
-                            justify="center"
-                            alignItems="center"
-                            style={{ minHeight: '95vh' }}
-                        >
+    return (
+        <div>
+            { userData.user ?
+                <>
+                {ShowDialog()}
+                <Container style={{ minHeight: '95vh' }}>
+                    <Grid
+                        container
+                        direction="column"
+                        justify="center"
+                        alignItems="center"
+                        style={{ minHeight: '95vh' }}
+                    >
+                        <Grid item>
+                            <Typography variant="h5" align="center" className={classes.title}>
+                                Update Game: {title}
+                            </Typography>
+                        </Grid>
+                             <form onSubmit={onSubmit}>
                                 <Grid item>
-                                    <Typography variant="h5" align="center" className={classes.title}>
-                                        Update Game: {title}
-                                    </Typography>
+                                    <TextField
+                                        label="Title"
+                                        variant="outlined"
+                                        size="small"
+                                        error={titleError}
+                                        name="title"
+                                        value={title}
+                                        onChange={onTitleHandler}
+                                        fullWidth
+                                        className={classes.textField}
+                                    />
                                 </Grid>
-                                <form onSubmit={this.onSubmit}>
-                                    <Grid item>
-                                        <TextField
-                                            label="Title"
-                                            variant="outlined"
-                                            size="small"
-                                            error={this.state.titleError}
-                                            name="title"
-                                            value={title}
-                                            onChange={this.handleChange}
-                                            fullWidth
-                                            className={classes.textField}
-                                        />
-                                    </Grid>
-                                    <Grid item>
-                                        <TextField
-                                            label="Year"
-                                            variant="outlined"
-                                            size="small"
-                                            error={this.state.dateError}
-                                            name="date"
-                                            value={date}
-                                            onChange={this.handleChange}
-                                            fullWidth
-                                            className={classes.textField}
-                                        />
-                                    </Grid>
-                                    <Grid item>
-                                        <TextField
-                                            id="standard-select-genre-native"
-                                            label='Genre'
-                                            name="genre"
-                                            value={genre}
-                                            onChange={this.handleChange}
-                                            error={this.state.genreError}
-                                            helperText="Please select genre"
-                                            select
-                                            fullWidth
-                                            SelectProps={{
-                                                native: true,
-                                            }}
-                                            className={classes.textField}
-                                        >
+                                <Grid item>
+                                    <TextField
+                                        label="Year"
+                                        variant="outlined"
+                                        size="small"
+                                        error={dateError}
+                                        name="date"
+                                        value={date}
+                                        onChange={onDateHandler}
+                                        fullWidth
+                                        className={classes.textField}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <TextField
+                                        id="standard-select-genre-native"
+                                        label='Genre'
+                                        name="genre"
+                                        value={genre}
+                                        onChange={onGenreHandler}
+                                        error={genreError}
+                                        helperText="Please select genre"
+                                        select
+                                        fullWidth
+                                        SelectProps={{
+                                            native: true,
+                                        }}
+                                        className={classes.textField}
+                                    >
                                             {genres.map(option => (
                                                 <option key={option.key} value={option.value}>
                                                     {option.label}
                                                 </option>
                                             ))}
                                         </TextField>
-                                    </Grid>
-                                    <Grid item>
-                                        <TextField
-                                            label="Summary"
-                                            variant="outlined"
-                                            size="small"
-                                            error={this.state.bodyError}
-                                            multiline
-                                            rows={8}
-                                            name="summary"
-                                            value={summary}
-                                            onChange={this.handleChange}
-                                            fullWidth
-                                            className={classes.textField}
-                                        />
-                                    </Grid>
-                                    <Grid item>
-                                        { 
-                                           userData.user.username === author ?
-                                            <>
-                                            <Button variant="contained" color="primary" type="submit" className={classes.button}>
-                                                Submit
-                                            </Button>
-                                            <Button variant="contained" color="secondary" className={classes.button} onClick={this.handleDialog}>
-                                                Delete
-                                            </Button>
-                                            </>
-                                            : <Typography variant="h6">
-                                                You cannot update this game
-                                              </Typography>
-                                        }
-                                        <Link to="/">
-                                            <Button variant="contained" color="default" className={classes.button}>
-                                                Cancel
-                                            </Button>
-                                        </Link>
-                                    </Grid>
-                                </form>
+                                </Grid>
+                                <Grid item>
+                                    <TextField
+                                        label="Summary"
+                                        variant="outlined"
+                                        size="small"
+                                        error={summaryError}
+                                        multiline
+                                        rows={8}
+                                        name="summary"
+                                        value={summary}
+                                        onChange={onSummaryHandler}
+                                        fullWidth
+                                        className={classes.textField}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    { 
+                                        userData.user.username === author ?
+                                        <>
+                                        <Button variant="contained" color="primary" type="submit" className={classes.button}>
+                                            Submit
+                                        </Button>
+                                        <Button variant="contained" color="secondary" className={classes.button} onClick={handleDialog}>
+                                            Delete
+                                        </Button>
+                                        </>
+                                        : <Typography variant="h6">
+                                            You cannot update this game
+                                        </Typography>
+                                    }
+                                    <Link to="/">
+                                        <Button variant="contained" color="default" className={classes.button}>
+                                            Cancel
+                                        </Button>
+                                    </Link>
+                                </Grid>
+                            </form>
                         </Grid>
-                    </Container> </> :
-                    <Grid container justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
-                        <Typography variant="h4">
-                            You must be logged in to create a Game.
-                        </Typography>
-                    </Grid>
+                    </Container> </> : <Header />
                 }
             </div>
         );
-    }
 }
 
-export default withStyles(styles)(GameCardEdit);
+export default GameCardEdit;
