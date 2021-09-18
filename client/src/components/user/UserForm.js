@@ -29,6 +29,7 @@ const UserForm = () => {
     const [nameInput, setName] = useState('');
     const [emailInput, setEmail] = useState('');
     const [passwordInput, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const [nameError, setNameError] = useState(false);
     const [emailError, setEmailError] = useState(false);
@@ -71,6 +72,7 @@ const UserForm = () => {
             }
         } catch(error) {
             setRegisterError(true);
+            setErrorMessage(error.response.data);
         }
     }
 
@@ -104,7 +106,7 @@ const UserForm = () => {
                             <Typography variant="h5" align="center">
                                 Register
                             </Typography>
-                            { registerError && <Typography style={{color: 'red', marginBottom: '10px' }}>Username/email taken already</Typography>}
+                            { registerError && <Typography style={{color: 'red', marginBottom: '10px' }}>{errorMessage}</Typography>}
                         </Grid>
                         <form onSubmit={submitHandler}>
                             <Grid item>
