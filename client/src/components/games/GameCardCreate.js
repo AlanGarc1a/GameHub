@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { Grid, Button, TextField, makeStyles, Typography, Container } from "@material-ui/core";
 import { Link, Redirect } from "react-router-dom";
+import Header from '../Header';
 import AuthContext from '../store/AuthContext';
 import axios from "axios";
 
@@ -65,6 +66,7 @@ const GameCardCreate = () => {
     const [genreError, setGenreError] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const [gameError, setGameError] = useState(false);
+    const [gameErrorMsg, setGameErrorMsg] = useState('');
 
     const { userData } = useContext(AuthContext);
 
@@ -119,6 +121,7 @@ const GameCardCreate = () => {
                 }
             } catch (error) {
                 setGameError(true);
+                setGameErrorMsg(error.response.data);
             }
         }
     };
@@ -147,7 +150,7 @@ const GameCardCreate = () => {
                                 New Game
                             </Typography>
                         </Grid>
-                        { gameError && <Typography style={{color: 'red', marginBottom: '10px'}}>Game Already exists</Typography>}
+                        { gameError && <Typography style={{color: 'red', marginBottom: '10px'}}>{gameErrorMsg}</Typography>}
                         <form onSubmit={onSubmitHandler}>
                             <Grid item>
                                 <TextField
@@ -224,12 +227,7 @@ const GameCardCreate = () => {
                             </Grid>
                         </form>
                     </Grid>
-                </Container></> :
-                <Grid container justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
-                    <Typography variant="h4">
-                        You must be logged in to create a Game.
-                    </Typography>
-                </Grid>
+                </Container></> : <Header />
             }
         </div>
     );
