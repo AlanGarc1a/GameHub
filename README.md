@@ -2,24 +2,24 @@
 
 GameHub is a single page web application where users can create, update, view, and delete the games they have played.
 
-# Motivation
-
-To build a web application application using the MERN stack.
-
 # Technologies
 
-* Front end
+Front end
  * React.js
  * Material UI
  * Axios
 
-* Back end
+Back end
  * Mongoose.js
  * Passport.js 
  * Passport-local-mongoose.js
  * Node.js
  * Express.js
  * Express-Session.js
+
+# Entity-Relational-Diagram
+
+![image](https://user-images.githubusercontent.com/32556354/133911936-958baa8a-e6af-4f1c-b92b-76ecd6740a7d.png)
 
 # Installation
 
