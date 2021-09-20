@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Card, Grid, Typography, Button, makeStyles, CardContent, CardHeader } from '@material-ui/core';
+import { Container, Card, Grid, Typography, Button, makeStyles, CardContent, CardHeader } from '@material-ui/core';
 import { Link, useParams } from 'react-router-dom';
 import Header from '../Header';
 import AuthContext from '../store/AuthContext';
@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: theme.spacing(2),
     },
     wordSpacing: {
-        marginBottom: theme.spacing(2)
+        marginBottom: theme.spacing(1)
     },
     button: {
         marginLeft: theme.spacing(2),
@@ -54,21 +54,21 @@ const GameCardView = () => {
     });
 
     return (
-        <div>
+        <Container style={{marginTop: '50px'}}>
         { userData.user ?
-            <Grid container justify="center" alignItems="center" style={{ minHeight: '95vh' }}>
+            <Grid container justify="center">
                 <Grid item>
-                    <Card className={classes.card}>
+                    <Card>
                         <CardHeader 
                             title={title}
                             subheader={date}
                         />
                         <CardContent>
                             <div>
-                                <Typography variant='subtitle2' color='textSecondary' paragraph>
+                                <Typography variant='subtitle2' color='textSecondary'paragraph>
                                     Created By: {author}
                                 </Typography>
-                                <Typography variant='subtitle2' color='textSecondary' className={classes.wordSpacing} paragraph>
+                                <Typography variant='subtitle2' color='textSecondary' className={classes.wordSpacing}>
                                     Genre: {genre}
                                 </Typography>
                                 <Typography paragraph>
@@ -76,16 +76,19 @@ const GameCardView = () => {
                                 </Typography>
                             </div>
                         </CardContent>
+                        { 
+                            userData.user.username === author ? <Link to={`/edit/${id}`}><Button variant="contained" size="small" color="info" className={classes.button}>Edit</Button></Link> : <></>
+                        }
                         <Link to="/">
                             <Button variant="contained" size="small" color="primary" className={classes.button}>
-                                 Go Back
+                                Home
                             </Button>
                          </Link>
                     </Card>
                 </Grid>
             </Grid> : <Header />
         }
-        </div>
+        </Container>
     );
 }
 
