@@ -22,7 +22,7 @@ module.exports = {
             const findGame = await Game.findOne({ title, date, genre });
 
             if(findGame) {
-                res.status(400).json({ message: "Game already exists" });
+                res.status(401).send('Game already exits');
             } 
             else {
                 const game = new Game({
@@ -37,7 +37,7 @@ module.exports = {
                 let savedGame = await game.save();
             
                 if(!savedGame) {
-                    res.status(400).json('Error creating game');
+                    res.status(401).json('Error in saving game');
                 }
                 res.status(200).json({ message: 'Game Created' });
             }
