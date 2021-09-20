@@ -4,22 +4,27 @@ module.exports = {
     register: async (req, res, next) => {
         try {
             const { username, email, password } = req.body;
-
-            const foundUser = User.findOne({ username });
-
+            
+            const foundUser = await User.findOne({ username });
+            const foundEmail = await User.findOne({ email });
+            
             if(foundUser) {
-                res.status(400).json({message: "A user with that username already exists "});
+                return res.status(401).json('username is already taken');
             }
-    
+            if(foundEmail) {
+                return res.status(401).json('An account exists with that email');
+            }
+          
             const user = new User( { username, email } );
-
+        
             const registerUser = await User.register(user, password);
-    
+            
             req.login(registerUser, err => {
                 if(err) return next(err);
-                res.json(registerUser);
+                res.status(200).json(registerUser);
             });
-    
+               
+           
         } catch(error) {
             next(error)
         }
@@ -29,6 +34,6 @@ module.exports = {
     },
     logout: (req, res) => {
         req.logout();
-        res.status(200).json('logout successfull');
+        res.status(200).send('logout successfull');
     }
 }
