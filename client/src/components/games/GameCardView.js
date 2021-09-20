@@ -77,7 +77,7 @@ const GameCardView = () => {
                             </div>
                         </CardContent>
                         { 
-                            userData.user.username === author ? <Link to={`/edit/${id}`}><Button variant="contained" size="small" color="info" className={classes.button}>Edit</Button></Link> : <></>
+                            userData.user.username === author ? <Link to={`/edit/${id}`}><Button variant="contained" size="small" color="default" className={classes.button}>Edit</Button></Link> : <></>
                         }
                         <Link to="/">
                             <Button variant="contained" size="small" color="primary" className={classes.button}>
