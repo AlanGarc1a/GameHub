@@ -40,9 +40,6 @@ const GameCard = (props) => {
                 </div>
             </CardContent>
                 <CardActions>
-                <Link to={`/edit/${id}`}>
-                    <Button color="primary">Edit</Button>
-                </Link>
                 <Link to={`/${title}/${id}`}>
                     <Button color="primary">View</Button>
                 </Link>
