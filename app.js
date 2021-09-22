@@ -26,10 +26,16 @@ const userRoutes = require('./routes/userRoutes');
 
 const { urlencoded } = require('express');
 
-//cors options
+const whitelist = ['http://localhost:3000', 'https://shrouded-anchorage-22905.herokuapp.com/']
 const corsOptions = {
-    origin: "*"
-};
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
 
 //session object
 const sesObject = {
