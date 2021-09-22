@@ -27,7 +27,7 @@
     "nodemon": "^2.0.12"
   },
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "*",
     "express-session": "^1.17.2",
     "connect-mongo": "^4.6.0",
     "cors": "^2.8.5",
