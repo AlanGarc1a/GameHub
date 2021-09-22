@@ -21,19 +21,19 @@
   },
   "homepage": "https://github.com/AlanGarc1a/GameHub#readme",
   "devDependencies": {
-    "connect-mongo": "^4.6.0",
-    "cors": "^2.8.5",
     "dotenv": "^9.0.2",
+    "mocha": "^9.0.2",
+    "supertest": "^6.1.4",
+    "nodemon": "^2.0.12"
+  },
+  "dependencies": {
     "express": "^4.17.1",
     "express-session": "^1.17.2",
-    "mocha": "^9.0.2",
+    "connect-mongo": "^4.6.0",
+    "cors": "^2.8.5",
     "mongoose": "^5.13.9",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^6.1.0",
-    "supertest": "^6.1.4"
-  },
-  "dependencies": {
-    "nodemon": "^2.0.12"
+    "passport-local-mongoose": "^6.1.0"
   }
 }
