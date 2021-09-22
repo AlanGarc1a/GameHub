@@ -14,8 +14,8 @@ const User = require('./models/user');
 
 const app  = express();
 const port = process.env.PORT;
-const DB   = process.env.DB_HOST;
-const DB_URL = process.env.DB_URL;
+const sess_secret = process.env.SESS_SECRET || 'devsecretsess';
+const DB_URL = process.env.DB_URL || process.env.DB_HOST;
 
 //game routes
 const gameRoutes = require('./routes/gameRoute');
@@ -35,11 +35,11 @@ const corsOptions = {
 //session object
 const sesObject = {
     store: MongoStore.create({
-        mongoUrl: DB,
-        secret: process.env.SESS_SECRET,
+        mongoUrl: DB_URL,
+        secret: sess_secret,
         touchAfter: 24 * 60 * 60
     }),
-    secret: process.env.SESS_SECRET,
+    secret: sess_secret,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -49,7 +49,7 @@ const sesObject = {
     }
 };
 
-mongoose.connect(DB, {
+mongoose.connect(DB_URL, {
     useCreateIndex: true, 
     useNewUrlParser: true, 
     useUnifiedTopology: true,
