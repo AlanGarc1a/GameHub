@@ -9,11 +9,12 @@ const passport       = require('passport');
 const localStrategy  = require('passport-local').Strategy;
 const session        = require('express-session');
 const MongoStore     = require('connect-mongo');
+const path           = require('path');
 
 const User = require('./models/user');
 
 const app  = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 const sess_secret = process.env.SESS_SECRET || 'devsecretsess';
 const DB_URL = process.env.DB_URL || process.env.DB_HOST;
 
@@ -62,6 +63,7 @@ mongoose.connect(DB_URL, {
 });
 
 //middleware
+app.use(express.static(path.join(__dirname, "client", "build")));
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
@@ -80,6 +82,10 @@ app.use('/api/games', gameRoutes);
 //user routes
 app.use('/api/users', userRoutes);
 
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
 
 app.listen(port, () => {
     console.log(`Server is listening on ${port}`);
