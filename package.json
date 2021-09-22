@@ -4,12 +4,15 @@
   "description": "A CRUD based application for games",
   "main": "app.js",
   "scripts": {
-    "test": "mocha 'test/apiTest.js'",
-    "start": "node app.js"
+    "start": "node app.js",
+    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AlanGarc1a/GameHub.git"
+  },
+  "engines": {
+    "node": "12.14.0"
   },
   "author": "Alan Garcia",
   "license": "ISC",
