@@ -8,12 +8,14 @@ const cors           = require('cors');
 const passport       = require('passport');
 const localStrategy  = require('passport-local').Strategy;
 const session        = require('express-session');
+const MongoStore     = require('connect-mongo');
 
 const User = require('./models/user');
 
 const app  = express();
 const port = process.env.PORT;
 const DB   = process.env.DB_HOST;
+const DB_URL = process.env.DB_URL;
 
 //game routes
 const gameRoutes = require('./routes/gameRoute');
@@ -25,19 +27,25 @@ const { urlencoded } = require('express');
 
 //cors options
 const corsOptions = {
+    credentials: true,
     origin: 'http://localhost:3000',
     optionsSuccessStatus: 200
 };
 
 //session object
 const sesObject = {
-    secret: "ultrasecretcode",
-    resave: true,
-    saveUninitialized: true,
+    store: MongoStore.create({
+        mongoUrl: DB,
+        secret: process.env.SESS_SECRET,
+        touchAfter: 24 * 60 * 60
+    }),
+    secret: process.env.SESS_SECRET,
+    resave: false,
+    saveUninitialized: false,
     cookie: {
-        httpOnly:true,
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-        maxAge: 1000 * 60 * 60 * 24 * 7
+        httpOnly: true,
+        sameSite: true,
+        maxAge: 3600000, // 1 hour
     }
 };
 
