@@ -16,7 +16,7 @@ const User = require('./models/user');
 const app  = express();
 const port = process.env.PORT || 8000;
 const sess_secret = process.env.SESS_SECRET || 'devsecretsess';
-const DB_URL = process.env.DB_HOST;
+const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017/gamehub';
 
 //game routes
 const gameRoutes = require('./routes/gameRoute');
@@ -48,17 +48,10 @@ const sesObject = {
     }
 };
 
-mongoose.connect(DB_URL, {
-    useCreateIndex: true, 
-    useNewUrlParser: true, 
-    useUnifiedTopology: true,
-    useFindAndModify: false
-}).then(() => {
-    console.log('MongoDB connection open');
-}).catch( err => {
-    console.log("MongoDB connection failed");
-    console.log(err);
-});
+mongoose
+     .connect( DB_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
+     .then(() => console.log( 'Database Connected' ))
+     .catch(err => console.log( err ));
 
 //middleware
 app.use(express.static(path.join(__dirname, "client", "build")));
