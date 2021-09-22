@@ -13,7 +13,7 @@ const MongoStore     = require('connect-mongo');
 const User = require('./models/user');
 
 const app  = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 const sess_secret = process.env.SESS_SECRET || 'devsecretsess';
 const DB_URL = process.env.DB_URL || process.env.DB_HOST;
 
@@ -81,7 +81,7 @@ app.use('/api/games', gameRoutes);
 app.use('/api/users', userRoutes);
 
 
-app.listen(process.env.PORT, () => {
+app.listen(port, () => {
     console.log(`Server is listening on ${port}`);
 });
 

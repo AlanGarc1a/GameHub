@@ -4,7 +4,8 @@
   "description": "A CRUD based application for games",
   "main": "app.js",
   "scripts": {
-    "test": "mocha 'test/apiTest.js'"
+    "test": "mocha 'test/apiTest.js'",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
