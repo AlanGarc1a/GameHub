@@ -16,7 +16,7 @@ const User = require('./models/user');
 const app  = express();
 const port = process.env.PORT || 8000;
 const sess_secret = process.env.SESS_SECRET || 'devsecretsess';
-const DB_URL = process.env.DB_URL || process.env.DB_HOST;
+const DB_URL = process.env.DB_HOST;
 
 //game routes
 const gameRoutes = require('./routes/gameRoute');
@@ -28,9 +28,7 @@ const { urlencoded } = require('express');
 
 //cors options
 const corsOptions = {
-    credentials: true,
-    origin: 'http://localhost:3000',
-    optionsSuccessStatus: 200
+    origin: "*"
 };
 
 //session object
