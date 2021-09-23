@@ -115,7 +115,7 @@ const GameCardCreate = () => {
         }
         else {
             try {
-                const createRes = await axios.post("http://localhost:5000/api/games/create", game);
+                const createRes = await axios.post("http://localhost:8000/api/games/create", game);
                 if (createRes.status === 200) {
                     setRedirect(true);
                 }

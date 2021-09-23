@@ -62,7 +62,7 @@ const UserForm = () => {
                 setPasswordError(true);
             }
             else {
-                const registerRes = await axios.post('http://localhost:5000/api/users/register', newUser);
+                const registerRes = await axios.post('http://localhost:8000/api/users/register', newUser);
                 
                 setUserData({
                     user: registerRes.data,

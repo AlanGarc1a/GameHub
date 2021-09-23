@@ -95,7 +95,7 @@ const GameCardEdit = () => {
     useEffect(() => {
         const fetchGame = async () => {
             try {
-                const res = await axios.get(`http://localhost:5000/api/games/${id}`);
+                const res = await axios.get(`http://localhost:8000/api/games/${id}`);
                 if(res.status === 200) {
                     setTitle(res.data.title);
                     setDate(res.data.date);
@@ -138,7 +138,7 @@ const GameCardEdit = () => {
         }
         else {
             try {
-                const res = await axios.put(`http://localhost:5000/api/games/update/${id}`, game);
+                const res = await axios.put(`http://localhost:8000/api/games/update/${id}`, game);
                 if(res.status === 200) {
                     setRedirect(true);
                 }
@@ -151,7 +151,7 @@ const GameCardEdit = () => {
 
     const deleteGame = async () => {
         try {
-            const res = await axios.delete(`http://localhost:5000/api/games/delete/${id}`);
+            const res = await axios.delete(`http://localhost:8000/api/games/delete/${id}`);
             if(res.status === 200) {
                 setRedirect(true);
                 setOpen(false);
