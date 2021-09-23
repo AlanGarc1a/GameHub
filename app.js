@@ -1,7 +1,4 @@
-if(process.env.NODE_ENV !== "production") {
-    require('dotenv').config();
-}
-
+require('dotenv').config();
 const express        = require('express');
 const mongoose       = require('mongoose');
 const cors           = require('cors');
@@ -16,7 +13,7 @@ const User = require('./models/user');
 const app  = express();
 const port = process.env.PORT || 8000;
 const sess_secret = process.env.SESS_SECRET || 'devsecretsess';
-const DB_URL = process.env.DB_URL || 'mongodb://localhost:27017/gamehub';
+const DB_URL = process.env.MONGO_URI || 'mongodb://localhost:27017/gamehub';
 
 //game routes
 const gameRoutes = require('./routes/gameRoute');
@@ -25,17 +22,6 @@ const gameRoutes = require('./routes/gameRoute');
 const userRoutes = require('./routes/userRoutes');
 
 const { urlencoded } = require('express');
-
-const whitelist = ['http://localhost:3000', 'https://shrouded-anchorage-22905.herokuapp.com/']
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  }
-}
 
 //session object
 const sesObject = {
@@ -60,8 +46,7 @@ mongoose
      .catch(err => console.log( err ));
 
 //middleware
-app.use(express.static(path.join(__dirname, "client", "build")));
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
 app.use(session(sesObject));
@@ -79,10 +64,9 @@ app.use('/api/games', gameRoutes);
 //user routes
 app.use('/api/users', userRoutes);
 
-
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-});
+if(process.env.NODE_ENV === "production") {
+  app.use(express.static('client/build'));
+}
 
 app.listen(port, () => {
     console.log(`Server is listening on ${port}`);
