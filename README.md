@@ -17,6 +17,12 @@ Back end
  * Express.js
  * Express-Session.js
 
+# Testing
+
+ * mocha.js
+ * chai.js
+ * supertest.js
+
 # Entity-Relational-Diagram
 
 ![image](https://user-images.githubusercontent.com/32556354/133911936-958baa8a-e6af-4f1c-b92b-76ecd6740a7d.png)
