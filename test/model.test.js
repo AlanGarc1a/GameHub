@@ -1,59 +1,110 @@
 const GameCard = require('../models/gamecard');
 const mongoose = require('mongoose');
-const { assert } = require('chai');
+const { expect } = require('chai');
+const request = require('supertest');
+const app = require('../app');
+
+// tells mongoose to use ES6 implementation of promises
+mongoose.Promise = global.Promise;
+const MONGODB_URI = 'mongodb://localhost:27017/gamehub_test';
+mongoose.connect(MONGODB_URI);
 
 describe('GameCard', () => {
 
-    beforeEach(() => {
-        mongoose.connect('mongodb://localhost:27017/gamehub')
-                .then(() => { console.log('Database connected') } )
-                .catch((error) => { console.log('Error in connecting to database', error) })
+    beforeEach((done) => {
+        mongoose.connection.collections.gamecards.drop(() => {
+            done();
+        });
     });
 
-    afterEach(() => {
-        GameCard.collection.drop();
+    it('GET /api/games/', async () => {
+        const gamecards = [
+            { title: 'Call of Duty 4', date: 2007, genre: 'Shooter', summary: '4th installment in the COD franchise', author:"61535b22ec6f8f0dc911370d" },
+            { title: 'Call of Duty Black Ops', date: 2010, genre: 'Shooter', summary: 'first installment in the COD Black Ops franchise', author:"61535b22ec6f8f0dc911370d" },
+        ]
+
+        await GameCard.insertMany(gamecards);
+        const res = await request(app).get("/api/games/");
+        expect(res.status).to.equal(200);
+        expect(res.body.length).to.equal(2);
     });
 
-    it('should create a gamecard and save to the database', async () => {
-        const gamecard = new GameCard({
-            title: 'Resident Evil 1',
-            date: 2001,
-            genre: 'Horror',
-            summary: 'Second game in the resident evil franchise',
+    describe('GET /api/games/:id', () => {
+        it('should return a gamecard with the specified id', async () => {
+           const game = new GameCard({
+               title: 'Resident Evil',
+               date: 1999,
+               genre: 'Horror',
+               summary: 'first game in the resident evil franchise',
+               author: '61535b22ec6f8f0dc911370d'
+           });
+           
+           await game.save();
+           const res = await request(app).get('/api/games/' + game._id);
+           expect(res.status).to.equal(200);
+           expect(res.body).to.have.property("title", game.title);
+        });
+
+        it('should return a 400 error when an invalid id is pass', async () => {
+            const res = await request(app).get('/api/games/1');
+            expect(res.status).to.equal(400);
+        });
+
+        it('should return a 400 error when a valid is passed but not found', async () => {
+            const res = await request(app).get('/api/games/"61550ddc22c6ba06578dbfcd"');
+            expect(res.status).to.equal(400);
+        })
+    });
+
+    describe('POST /api/games/create', () => {
+        it('should create a new gamecard', async () => {
+            const res = await request(app)
+                            .post('/api/games/create')
+                            .send({ title: 'Super Mario 64', date: 1996, genre: 'Platformer', body: '3D mario game for the N64', author: '61535b22ec6f8f0dc911370d'});
+
+            expect(res.status).to.equal(200)
+        });
+    });
+
+    describe("PUT /api/games/update/:id", () => {
+        it("should update the existing user and return 200", async() => {
+            const game = new GameCard({
+                title: "lola",
+                date: 2020,
+                genre: "Platformer",
+                summary: 'new game',
+                author: "61535b22ec6f8f0dc911370d"
+            });
+            await game.save();
+    
+            const res = await request(app)
+                .put("/api/games/update/" + game._id)
+                .send({
+                    title: "juan"
+                });
+    
+          expect(res.status).to.equal(200);
+        });
+    });
+    
+    describe("DELETE /api/games/delete/:id", () => {
+        it("should delete requested id and return response 200", async () => {
+          const game = new GameCard({
+            title: "lola",
+            date: 2020,
+            genre: "Platformer",
+            summary: 'new game',
             author: "61535b22ec6f8f0dc911370d"
+          });
+          await game.save();
+          const gameId = game._id;
+          const res = await request(app).delete("/api/games/delete/" + gameId);
+          expect(res.status).to.be.equal(200);
         });
-
-        await gamecard.save();
-    });
-
-    it('should fail to create gamecard if at least one path is missing', () => {
-        const gamecard = new GameCard({
-            date: 2001,
-            genre: 'Horror',
-            summary: 'Second game in the resident evil franchise',
-            author: "61535b22ec6f8f0dc911370d"
+    
+        it("should return 404 when deleted user is requested", async () => {
+          let res = await request(app).get("/api/games/delete/1");
+          expect(res.status).to.be.equal(404);
         });
-    });
-
-    it('creates a gamecard with the title', () => {
-        const gamecard = new GameCard({
-            title: 'Resident Evil 1',
-        });
-
-        assert.strictEqual(gamecard.title, 'Resident Evil 1');
-    });
-
-    it('should update the gamecard path with the new path', () => {
-        const gamecard = new GameCard({
-            title: 'Resident Evil 1',
-            date: 2001,
-            genre: 'Horror',
-            summary: 'Second game in the resident evil franchise',
-            author: "61535b22ec6f8f0dc911370d"
-        });
-
-        gamecard.date = 2000
-
-        assert.strictEqual(gamecard.date, 2000);
     });
 });
