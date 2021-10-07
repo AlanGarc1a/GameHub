@@ -15,7 +15,7 @@ const User = require('./models/user');
 const app  = express();
 const port = process.env.PORT || 8000;
 const sess_secret = process.env.SESS_SECRET || 'devsecretsess';
-const DB_URL = process.env.MONGO_URI || 'mongodb://localhost:27017/gamehub';
+const DB_URL = process.env.MONGO_URI || process.env.DB_DEV_URL;
 
 //game routes
 const gameRoutes = require('./routes/gameRoute');
@@ -42,8 +42,13 @@ const sesObject = {
     }
 };
 
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
+
 mongoose
-     .connect( DB_URL, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
+     .connect( DB_URL)
      .then(() => console.log( 'Database Connected' ))
      .catch(err => console.log( err ));
 
