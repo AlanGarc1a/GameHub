@@ -7,7 +7,12 @@ const app = require('../app');
 // tells mongoose to use ES6 implementation of promises
 mongoose.Promise = global.Promise;
 const MONGODB_URI = 'mongodb://localhost:27017/gamehub_test';
-mongoose.connect(MONGODB_URI);
+mongoose.connect(MONGODB_URI,{
+    useFindAndModify: false,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+});
 
 describe('GameCard', () => {
 
